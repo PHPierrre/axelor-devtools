@@ -1,9 +1,9 @@
-package com.github.phpierrre.axelordevtools.listeners
+package fr.phpierre.axelordevtools.listeners
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.github.phpierrre.axelordevtools.services.MyProjectService
+import fr.phpierre.axelordevtools.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 

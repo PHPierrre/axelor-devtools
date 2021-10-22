@@ -1,7 +1,7 @@
-package com.github.phpierrre.axelordevtools.services
+package fr.phpierre.axelordevtools.services
 
 import com.intellij.openapi.project.Project
-import com.github.phpierrre.axelordevtools.MyBundle
+import fr.phpierre.axelordevtools.MyBundle
 
 class MyProjectService(project: Project) {
 

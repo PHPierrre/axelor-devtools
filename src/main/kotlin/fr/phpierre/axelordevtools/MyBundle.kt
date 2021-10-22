@@ -1,4 +1,4 @@
-package com.github.phpierrre.axelordevtools
+package fr.phpierre.axelordevtools
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

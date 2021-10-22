@@ -1,6 +1,6 @@
-package com.github.phpierrre.axelordevtools.services
+package fr.phpierre.axelordevtools.services
 
-import com.github.phpierrre.axelordevtools.MyBundle
+import fr.phpierre.axelordevtools.MyBundle
 
 class MyApplicationService {
 

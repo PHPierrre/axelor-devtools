@@ -1,18 +1,22 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.phpierrre.axelordevtools</id>
+    <id>fr.phpierre.axelordevtools</id>
     <name>axelor-devtools</name>
-    <vendor>phpierrre</vendor>
+    <vendor>phpierre</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.phpierrre.axelordevtools.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.phpierrre.axelordevtools.services.MyProjectService"/>
+        <!-- https://plugins.jetbrains.com/docs/intellij/extension-point-list.html#corexml -->
+
+        <applicationService serviceImplementation="fr.phpierre.axelordevtools.services.MyApplicationService"/>
+        <projectService serviceImplementation="fr.phpierre.axelordevtools.services.MyProjectService"/>
+
+        <psi.referenceContributor implementation="fr.phpierre.axelordevtools.references.xml.XmlNameReferenceContributor" />
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.phpierrre.axelordevtools.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+<!--        <listener class="fr.phpierre.axelordevtools.listeners.MyProjectManagerListener"-->
+<!--                  topic="javax.swing.event.PopupMenuListener"/>-->
     </applicationListeners>
 </idea-plugin>
