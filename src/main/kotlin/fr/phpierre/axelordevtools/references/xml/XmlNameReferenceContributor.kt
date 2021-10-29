@@ -1,50 +1,65 @@
 package fr.phpierre.axelordevtools.references.xml
 
-import com.intellij.openapi.util.TextRange
-import com.intellij.patterns.XmlAttributeValuePattern
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.xml.XmlAttributeValueImpl
 import com.intellij.util.ProcessingContext
 
-
 class XmlNameReferenceContributor : PsiReferenceContributor() {
 
-    val GRID_NAME = XmlPatterns.psiElement().withName("name").withParent(XmlPatterns.psiElement().withName("form"));
-
-    //val FORM_NAME = XmlPatterns.psiElement().withName("name").withParent(XmlPatterns.psiElement().withName("grid"));
-    val FORM_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.psiElement().withName("form")));
-
-    val FIELD_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")));
-
     companion object {
-        val MODEL_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("model").withParent(XmlPatterns.psiElement().withName("form")));
+        val MODEL_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("model"))
 
-        val MODULE_PACKAGE = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("package").withParent(XmlPatterns.psiElement().withName("module")));
-        val ENTITY_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.psiElement().withName("entity")));
+        val FIELD_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")))
+
+        /**
+         * <action-view name=".." model="...">
+         *     <view type="grid" name="xxx"/>
+         *     <view type="form" name="xxx"/>
+         * </action-view>
+         */
+        val ACTION_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.psiElement().withName("view")))
+        val PANEL_INCLUDE_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("view").withParent(XmlPatterns.psiElement().withName("panel-include")))
+        val GRID_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("grid-view"))
+        val FORM_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("form-view"))
+
+        val NAME_VIEW = PlatformPatterns.or(ACTION_VIEW_VIEW, PANEL_INCLUDE_VIEW, GRID_VIEW_VIEW, FORM_VIEW_VIEW)
+
+        val AXELOR_VIEW = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(AxelorViewNameReference(element))
+            }
+        }
+
+        val AXELOR_DOMAIN = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(AxelorDomainReference(element))
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        println(registrar)
-
-//        registrar.registerReferenceProvider(FORM_NAME,
-//                object : PsiReferenceProvider() {
-//                    override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-//                        println("form")
-//                        //println(element.firstChild.nextSibling is XmlAttributeValue)
-//                        return PsiReference.EMPTY_ARRAY
-//                    }
-//                });
+        registrar.registerReferenceProvider(NAME_VIEW, AXELOR_VIEW)
+        registrar.registerReferenceProvider(MODEL_NAME, AXELOR_DOMAIN)
 
         registrar.registerReferenceProvider(FIELD_NAME,
                 object : PsiReferenceProvider() {
                     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-                        if(element !is XmlAttributeValueImpl)
-                            return PsiReference.EMPTY_ARRAY;
 
-                        val range = TextRange(1, element.text.length - 1)
-                        return arrayOf(XmlAttributeNameReference(element as XmlAttributeValueImpl, range))
+                        if(element !is XmlAttributeValueImpl)
+                            return PsiReference.EMPTY_ARRAY
+
+                        return arrayOf(XmlAttributeNameReference(element))
                     }
-                });
+                })
     }
 }

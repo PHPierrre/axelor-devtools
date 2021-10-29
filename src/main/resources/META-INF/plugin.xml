@@ -13,6 +13,20 @@
         <projectService serviceImplementation="fr.phpierre.axelordevtools.services.MyProjectService"/>
 
         <psi.referenceContributor implementation="fr.phpierre.axelordevtools.references.xml.XmlNameReferenceContributor" />
+
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.DomainPackageIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewNameIndex" />
+
+        <completion.contributor language="XML"
+                                implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
+
+        <!-- TODO: gestion des models extends (ils ne trouve pas les pros) -->
+        <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
+        <!-- TODO: lang.foldingBuilder pour remplacer les titles des views par leur texte, Aussi pour les fichiers application.properties -->
+
+        <!-- todo: codeInsignt icone pour les dao -->
+        <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
+
     </extensions>
 
     <applicationListeners>
