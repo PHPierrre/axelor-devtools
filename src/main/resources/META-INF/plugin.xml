@@ -5,6 +5,8 @@
     <vendor>phpierre</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.properties</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- https://plugins.jetbrains.com/docs/intellij/extension-point-list.html#corexml -->
@@ -20,17 +22,17 @@
         <completion.contributor language="XML"
                                 implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
 
+        <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
+
+
         <!-- TODO: gestion des models extends (ils ne trouve pas les pros) -->
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
-        <!-- TODO: lang.foldingBuilder pour remplacer les titles des views par leur texte, Aussi pour les fichiers application.properties -->
-
+        <!-- TODO: lang.foldingBuilder pour remplacer les titles des views par leur texte -->
         <!-- todo: codeInsignt icone pour les dao -->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
 
     </extensions>
 
     <applicationListeners>
-<!--        <listener class="fr.phpierre.axelordevtools.listeners.MyProjectManagerListener"-->
-<!--                  topic="javax.swing.event.PopupMenuListener"/>-->
     </applicationListeners>
 </idea-plugin>
