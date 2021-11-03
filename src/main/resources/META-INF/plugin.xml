@@ -24,11 +24,12 @@
 
         <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
 
-
-        <!-- TODO: gestion des models extends (ils ne trouve pas les pros) -->
+        <!-- index selection + click selection + auto complete selection -->
+        <!-- TODO: code completion model="" -->
+        <!-- TODO: ref="class" -->
+        <!-- TODO: ref="class" -->
+        <!-- TODO: extends="CLICK" + auto complete + extends="class" -->
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
-        <!-- TODO: lang.foldingBuilder pour remplacer les titles des views par leur texte -->
-        <!-- todo: codeInsignt icone pour les dao -->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
 
     </extensions>
