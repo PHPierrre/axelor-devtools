@@ -24,7 +24,11 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
     companion object {
 
         /**
-         * Find if a field exist in a domain
+         * Find if a field exist in a domain.
+         * @param project The project
+         * @param key The field name
+         * @param modelName The domain name (package.class)
+         * @return A set of fields found
          */
         fun findFieldFromModelName(
             project: Project,
@@ -43,6 +47,12 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return result
         }
 
+        /**
+         * Find if a field name exist in a domain and his parents
+         * @param file The domain file
+         * @param key The field name
+         * @return A set of fields found
+         */
         private fun getFieldFromFile(
             file: PsiFile?,
             key: String
@@ -137,8 +147,8 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
          * @param psiFile The domain file
          * @return A list with every field found.
          */
-        fun getFieldsFromDomain(psiFile: PsiFile): MutableSet<String> {
-            val results: MutableSet<String> = mutableSetOf()
+        fun getFieldsFromDomain(psiFile: PsiFile): MutableSet<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
             if(psiFile !is XmlFile) {
                 return results
             }
@@ -161,8 +171,8 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                     tags.forEach { tag ->
                         val nameAttr = tag.getAttribute("name")
                         nameAttr?.let { name ->
-                            name.value?.let { value -> results.add(value)
-                            }
+                            results.add(name)
+                        //name.value?.let { value -> results.add(value) }
                         }
                     }
                 }
@@ -170,6 +180,12 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return results
         }
 
+        /**
+         * Find where a view is defined in the project
+         * @param project The projet
+         * @param viewName The view name
+         * @return A list of locations of the view in the project
+         */
         fun findViewFromName(project: Project, viewName: String): List<PsiElement> {
             val result: MutableList<PsiElement> = ArrayList()
 
@@ -189,6 +205,12 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return result
         }
 
+        /**
+         * Find where a domain is defined in the project
+         * @param project The projet
+         * @param domainName The domain name (package.class)
+         * @return A list of locations of the domain in the project
+         */
         fun findDomainFromPackage(project: Project, domainName: String): List<PsiElement> {
             val result: MutableList<PsiElement> = ArrayList()
 
@@ -206,6 +228,12 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return result
         }
 
+        /**
+         * Search the value of a key in the main application.properties file
+         * @param project The projet
+         * @param key The property key
+         * @return A list of defined key found in the property file
+         */
         fun findProperties(project: Project, key: String): List<IProperty> {
             val results: MutableList<IProperty> = ArrayList()
 
@@ -219,6 +247,31 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                     }
                 }
             }
+            return results
+        }
+
+        /**
+         * Search every selection [XmlTag] in a file
+         * @param psiFile The file
+         * @return A list of selection found
+         */
+        fun indexSelectionName(psiFile: PsiFile): Set<String> {
+            val results: MutableSet<String> = mutableSetOf()
+            if(psiFile !is XmlFile) {
+                return results
+            }
+
+            val rootTag: XmlTag? = psiFile.rootTag
+
+            val selections = rootTag?.findSubTags("selection")
+
+            selections?.forEach { tag ->
+                val attr = tag.getAttribute("name")
+                attr?.value?.let {
+                    results.add(it)
+                }
+            }
+
             return results
         }
     }

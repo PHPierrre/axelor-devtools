@@ -18,19 +18,24 @@
 
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.DomainPackageIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewNameIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.SelectionNameIndex" />
 
-        <completion.contributor language="XML"
-                                implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.SelectionCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ModelCompletionContributor"/>
 
         <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
 
-        <!-- index selection + click selection + auto complete selection -->
-        <!-- TODO: code completion model="" -->
+        <!-- completion.contributor remplacer text avec icone cf LookupElementBuilder.create.... -->
+        <!-- click selection -->
         <!-- TODO: ref="class" -->
         <!-- TODO: ref="class" -->
         <!-- TODO: extends="CLICK" + auto complete + extends="class" -->
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
+
+        <!-- unit test -->
+        <!-- changelog -->
 
     </extensions>
 

@@ -29,6 +29,16 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         val FIELD_NAME = XmlPatterns.xmlAttributeValue().with(DumbFieldCondition("XML_FIELD")).withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")))
 
         /**
+         * <selection name="xxxx">
+         *     <option ..></option>
+         * </selection>
+         */
+        val SELECTION_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.psiElement().withName("selection")))
+
+        //<...selection="xxx" ...>
+        val SELECTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("selection"))
+
+        /**
          * <action-view name=".." model="...">
          *     <view type="grid" name="xxx"/>
          *     <view type="form" name="xxx"/>
