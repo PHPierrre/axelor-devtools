@@ -16,7 +16,7 @@ class ModelCompletionContributor : CompletionContributor() {
     init {
         extend(
             CompletionType.BASIC, PlatformPatterns.psiElement().withLanguage(XMLLanguage.INSTANCE).inside(
-                XmlNameReferenceContributor.MODEL_NAME),
+                XmlNameReferenceContributor.MODEL_DOMAIN),
             object : CompletionProvider<CompletionParameters?>() {
                 override fun addCompletions(
                     parameters: @NotNull CompletionParameters,

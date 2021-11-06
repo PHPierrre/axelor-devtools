@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull
 
 
 class DumbFieldCondition(@NotNull vararg keys: String) :
-    PatternCondition<PsiElement>("manifest") {
+
+    PatternCondition<PsiElement>(keys[0]) {
     override fun accepts(
         @NotNull element: PsiElement,
         context: ProcessingContext

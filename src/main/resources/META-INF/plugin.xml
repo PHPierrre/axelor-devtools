@@ -23,14 +23,12 @@
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.SelectionCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ModelCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ViewParamCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.DomainCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.WidgetCompletionContributor"/>
 
         <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
 
-        <!-- completion.contributor remplacer text avec icone cf LookupElementBuilder.create.... -->
-        <!-- click selection -->
-        <!-- TODO: ref="class" -->
-        <!-- TODO: ref="class" -->
-        <!-- TODO: extends="CLICK" + auto complete + extends="class" -->
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
 

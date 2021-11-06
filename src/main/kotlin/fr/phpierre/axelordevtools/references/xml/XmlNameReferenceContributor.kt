@@ -24,6 +24,11 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         // <... ref="xxxx" ...>
         val REF_DOMAIN = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("ref"))
 
+        // <entity .. extends="xxxx" ...>
+        val EXTENDS_ENTITY = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("extends").withParent(XmlPatterns.xmlTag().withName("entity")))
+
+        val MODEL_DOMAIN = PlatformPatterns.or(MODEL_NAME, REF_DOMAIN, EXTENDS_ENTITY);
+
         // <field ... name="xxx" .... />
         // do not detect name that start with a dollar : <field ... name="$xxx" .... />
         val FIELD_NAME = XmlPatterns.xmlAttributeValue().with(DumbFieldCondition("XML_FIELD")).withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")))
@@ -77,22 +82,32 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 return arrayOf(AxelorDomainReference(element))
             }
         }
+
+        val AXELOR_FIELD = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(XmlAttributeNameReference(element))
+            }
+        }
+
+        val AXELOR_SELECTION = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(XmlAttributeSelectionReference(element))
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(NAME_VIEW, AXELOR_VIEW)
-        registrar.registerReferenceProvider(MODEL_NAME, AXELOR_DOMAIN)
-        registrar.registerReferenceProvider(REF_DOMAIN, AXELOR_DOMAIN)
-
-        registrar.registerReferenceProvider(FIELD_NAME,
-                object : PsiReferenceProvider() {
-                    override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-
-                        if(element !is XmlAttributeValueImpl)
-                            return PsiReference.EMPTY_ARRAY
-
-                        return arrayOf(XmlAttributeNameReference(element))
-                    }
-                })
+        registrar.registerReferenceProvider(MODEL_DOMAIN, AXELOR_DOMAIN)
+        registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
+        registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
     }
 }

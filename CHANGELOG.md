@@ -1,7 +1,12 @@
-<!-- Keep a Changelog guide -> https://keepachangelog.com -->
-
-# axelor-devtools Changelog
+# Changelog
 
 ## [Unreleased]
-### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+
+## [1.0.0]
+- Field navigation, auto-completion with extended domains.
+- Model navigation and auto-completion
+- View navigation
+- Selection navigation and auto-completion
+- Xml attributes auto-completion
+- application.properties display
+

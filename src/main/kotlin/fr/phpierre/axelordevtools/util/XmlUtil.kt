@@ -16,6 +16,7 @@ import com.intellij.psi.xml.XmlTag
 import com.intellij.structuralsearch.impl.matcher.GlobalMatchingVisitor
 import com.intellij.util.indexing.FileBasedIndex
 import fr.phpierre.axelordevtools.indexes.DomainPackageIndex
+import fr.phpierre.axelordevtools.indexes.SelectionNameIndex
 import fr.phpierre.axelordevtools.indexes.ViewNameIndex
 
 
@@ -272,6 +273,29 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 }
             }
 
+            return results
+        }
+
+        fun findSelectionName(project: Project, selectionName: String): Set<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
+
+            val files = FileBasedIndex.getInstance().getContainingFiles(SelectionNameIndex.KEY, selectionName, ProjectScope.getProjectScope(project))
+
+            for (virtualFile in files) {
+                val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
+                val rootTag: XmlTag? = (file as XmlFile).rootTag
+
+                val selections = rootTag?.findSubTags("selection")
+
+                selections?.forEach { tag ->
+                    val attr = tag.getAttribute("name")
+                    attr?.value?.let {
+                        if(it == selectionName) {
+                            results.add(attr)
+                        }
+                    }
+                }
+            }
             return results
         }
     }
