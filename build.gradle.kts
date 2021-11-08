@@ -9,7 +9,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.5.30"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.1.6"
+    id("org.jetbrains.intellij") version "1.2.1"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.0"
     // Gradle Qodana Plugin
@@ -30,7 +30,7 @@ intellij {
     version.set(properties("platformVersion"))
     type.set(properties("platformType"))
     downloadSources.set(properties("platformDownloadSources").toBoolean())
-    updateSinceUntilBuild.set(true)
+    updateSinceUntilBuild.set(false)
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
@@ -106,9 +106,12 @@ tasks {
     }
 
     signPlugin {
-        certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-        privateKey.set(System.getenv("PRIVATE_KEY"))
+        //certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+        //privateKey.set(System.getenv("PRIVATE_KEY"))
         password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
+
+        certificateChain.set(File(System.getenv("CERTIFICATE_CHAIN") ?: "./.keys/chain.crt").readText(Charsets.UTF_8))
+        certificateChain.set(File(System.getenv("PRIVATE_KEY") ?: "./.keys/private.pem").readText(Charsets.UTF_8))
     }
 
     publishPlugin {
