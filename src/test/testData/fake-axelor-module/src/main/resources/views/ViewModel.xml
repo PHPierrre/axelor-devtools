@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+    <grid name="devtools-list-view-grid" model="<caret>">
+        <field name="<caret>" />
+        <field name="city" />
+        <field name="description" />
+        <field name="viewType" selection="view.type.select" />
+    </grid>
+
+    <form name="devtools-edit-view-form" title="Civility"  model="fr.phpierre.faxeaxelormodule.View">
+        <panel name="listView" colSpan="12">
+            <field name="name" colSpan="5" />
+            <field name="city" colSpan="5" />
+            <field name="isActive" colSpan="2" />
+            <field name="description" colSpan="12" />
+        </panel>
+    </form>
+
+</object-views>
