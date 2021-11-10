@@ -27,11 +27,11 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         // <entity .. extends="xxxx" ...>
         val EXTENDS_ENTITY = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("extends").withParent(XmlPatterns.xmlTag().withName("entity")))
 
-        val MODEL_DOMAIN = PlatformPatterns.or(MODEL_NAME, REF_DOMAIN, EXTENDS_ENTITY);
+        val MODEL_DOMAIN = PlatformPatterns.or(MODEL_NAME, REF_DOMAIN, EXTENDS_ENTITY)
 
         // <field ... name="xxx" .... />
         // do not detect name that start with a dollar : <field ... name="$xxx" .... />
-        val FIELD_NAME = XmlPatterns.xmlAttributeValue().with(DumbFieldCondition("XML_FIELD")).withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")))
+        val FIELD_NAME = XmlPatterns.xmlAttributeValue().with(DumbFieldCondition("XML_DUMMY_FIELD")).withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")))
 
         /**
          * <selection name="xxxx">

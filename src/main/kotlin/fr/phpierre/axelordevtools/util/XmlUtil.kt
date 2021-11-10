@@ -25,7 +25,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
     companion object {
 
         /**
-         * Find if a field exist in a domain.
+         * Find the existant field in a domain and his parents.
          * @param project The project
          * @param key The field name
          * @param modelName The domain name (package.class)
@@ -68,6 +68,32 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                     results.addAll(findFieldFromModelName(file.project, key, value))
                 }
             }
+
+            // If the field is a relation
+            if(key.contains(".")) {
+                val field: String = key.substringBefore(".")
+                val tail: String = key.substringAfter(".")
+                val relations: Set<PsiElement> = searchFieldInEntity(entity, field)
+                for (relation in relations) {
+                    val ref = (relation.parent as XmlTag).getAttribute("ref")
+                    ref?.value?.let {
+                        results.addAll(findFieldFromModelName(file.project,tail, it))
+                    }
+                }
+            }
+            // Else it's a simple field
+            else {
+                results.addAll(searchFieldInEntity(entity, key))
+            }
+
+            return results
+        }
+
+        private fun searchFieldInEntity(
+            entity: XmlTag,
+            key: String
+        ): Set<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
 
             entity.subTags.forEach { tag ->
                 tag.attributes.forEach { attribute ->
@@ -173,7 +199,6 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                         val nameAttr = tag.getAttribute("name")
                         nameAttr?.let { name ->
                             results.add(name)
-                        //name.value?.let { value -> results.add(value) }
                         }
                     }
                 }

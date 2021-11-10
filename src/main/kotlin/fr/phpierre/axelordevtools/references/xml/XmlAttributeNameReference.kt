@@ -15,7 +15,7 @@ class XmlAttributeNameReference(@NotNull element: PsiElement) : PsiReferenceBase
         val project: Project = myElement!!.project
         val modelName: String = XmlUtil.xmlViewRootModelName(element) ?: return arrayOf()
         val range = TextRange(1, element.text.length - 1)
-        val key = element.text.substring(range.startOffset, range.endOffset).substringBefore(".")
+        val key = element.text.substring(range.startOffset, range.endOffset)
 
         val properties: Set<PsiElement> = XmlUtil.findFieldFromModelName(project, key, modelName)
         val results: MutableList<ResolveResult> = ArrayList()
