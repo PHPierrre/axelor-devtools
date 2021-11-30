@@ -1,18 +1,12 @@
 package fr.phpierre.axelordevtools.references.xml
 
-import com.intellij.openapi.rd.createLifetime
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.xml.XmlAttributeValueImpl
 import com.intellij.util.ProcessingContext
-import com.intellij.psi.PsiFile
-
 import com.intellij.psi.PsiElement
-import com.intellij.patterns.PatternCondition
-import com.intellij.psi.impl.source.resolve.reference.PsiReferenceUtil
-import com.intellij.psi.util.PsiUtilBase
-import org.jetbrains.annotations.NotNull
+import fr.phpierre.axelordevtools.references.java.JavaMethodReference
 
 
 class XmlNameReferenceContributor : PsiReferenceContributor() {
@@ -31,7 +25,11 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
 
         // <field ... name="xxx" .... />
         // do not detect name that start with a dollar : <field ... name="$xxx" .... />
-        val FIELD_NAME = XmlPatterns.xmlAttributeValue().with(DumbFieldCondition("XML_DUMMY_FIELD")).withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("field")))
+        val FIELD_NAME = XmlPatterns.xmlAttributeValue()
+                .with(DumbFieldCondition("XML_DUMMY_FIELD"))
+                .with(DefaultFieldCondition("XML_DEFAULT-FIELD"))
+                .withParent(XmlPatterns.xmlAttribute("name")
+                .withParent(XmlPatterns.xmlTag().withName("field")))
 
         /**
          * <selection name="xxxx">
@@ -43,8 +41,16 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         //<...selection="xxx" ...>
         val SELECTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("selection"))
 
+
         /**
-         * <action-view name=".." model="...">
+         * <action-method name="...">
+         *     <call class="..." method="xxx"/>
+         * </action-method>
+         */
+        val ACTION_METHOD_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("method").withParent(XmlPatterns.psiElement().withName("call")))
+
+        /**
+        * <action-view name=".." model="...">
          *     <view type="grid" name="xxx"/>
          *     <view type="form" name="xxx"/>
          * </action-view>
@@ -102,6 +108,16 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 return arrayOf(XmlAttributeSelectionReference(element))
             }
         }
+
+        val AXELOR_JAVA_METHOD = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(JavaMethodReference(element))
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -109,5 +125,6 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(MODEL_DOMAIN, AXELOR_DOMAIN)
         registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
+        registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)
     }
 }
