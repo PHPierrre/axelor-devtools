@@ -7,13 +7,10 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.properties</depends>
     <depends>com.intellij.java</depends>
+    <depends>com.intellij.gradle</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- https://plugins.jetbrains.com/docs/intellij/extension-point-list.html#corexml -->
-
-        <applicationService serviceImplementation="fr.phpierre.axelordevtools.services.MyApplicationService"/>
-        <projectService serviceImplementation="fr.phpierre.axelordevtools.services.MyProjectService"/>
-
         <psi.referenceContributor implementation="fr.phpierre.axelordevtools.references.xml.XmlNameReferenceContributor" />
 
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.DomainPackageIndex" />
@@ -29,12 +26,10 @@
 
         <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
 
+        <editorNotificationProvider implementation="fr.phpierre.axelordevtools.notification.SetupGradleBuildTool" />
+
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
-
-        <!-- unit test -->
-        <!-- changelog -->
-
     </extensions>
 
     <applicationListeners>
