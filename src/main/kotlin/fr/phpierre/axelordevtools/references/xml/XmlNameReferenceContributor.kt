@@ -7,6 +7,9 @@ import com.intellij.psi.impl.source.xml.XmlAttributeValueImpl
 import com.intellij.util.ProcessingContext
 import com.intellij.psi.PsiElement
 import fr.phpierre.axelordevtools.references.java.JavaMethodReference
+import fr.phpierre.axelordevtools.references.xml.condition.DefaultFieldCondition
+import fr.phpierre.axelordevtools.references.xml.condition.DumbFieldCondition
+import fr.phpierre.axelordevtools.references.xml.condition.ViewFileCondition
 
 
 class XmlNameReferenceContributor : PsiReferenceContributor() {
@@ -26,8 +29,9 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         // <field ... name="xxx" .... />
         // do not detect name that start with a dollar : <field ... name="$xxx" .... />
         val FIELD_NAME = XmlPatterns.xmlAttributeValue()
+                .with(ViewFileCondition("XML_VIEW_FILE"))
                 .with(DumbFieldCondition("XML_DUMMY_FIELD"))
-                .with(DefaultFieldCondition("XML_DEFAULT-FIELD"))
+                .with(DefaultFieldCondition("XML_DEFAULT_FIELD"))
                 .withParent(XmlPatterns.xmlAttribute("name")
                 .withParent(XmlPatterns.xmlTag().withName("field")))
 

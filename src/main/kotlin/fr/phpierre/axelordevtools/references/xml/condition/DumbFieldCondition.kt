@@ -1,4 +1,4 @@
-package fr.phpierre.axelordevtools.references.xml
+package fr.phpierre.axelordevtools.references.xml.condition
 
 import com.intellij.patterns.PatternCondition
 import com.intellij.psi.PsiElement
