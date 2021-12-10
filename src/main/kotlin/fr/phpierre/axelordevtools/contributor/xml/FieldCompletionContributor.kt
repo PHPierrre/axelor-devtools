@@ -24,7 +24,7 @@ class FieldCompletionContributor : CompletionContributor() {
         // These columns are present in every table.
         val defaultColumns = setOf(
             "id",
-            "uuid",
+            "UUID",
             "archived",
             "externalCode",
             "externalId",

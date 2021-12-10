@@ -29,7 +29,7 @@ class SetupGradleBuildTool(project: Project) : EditorNotifications.Provider<Edit
         }
 
         val panel = EditorNotificationPanel()
-        panel.setText(MyBundle.message("gradleBuildToolNeedToBeConfigured"))
+        panel.text = MyBundle.message("gradleBuildToolNeedToBeConfigured")
         panel.createActionLabel(MyBundle.message("gradleBuildToolConfigure")) {
             ApplicationManager.getApplication().invokeLater {
                 ShowSettingsUtil.getInstance().showSettingsDialog(project, GradleConfigurable::class.java)

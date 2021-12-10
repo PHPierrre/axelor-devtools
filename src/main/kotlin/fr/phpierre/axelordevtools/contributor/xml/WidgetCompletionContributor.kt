@@ -35,18 +35,20 @@ class WidgetCompletionContributor: CompletionContributor() {
         "NavSelect",
         "RadioSelect",
         "CheckboxSelect",
+        "InlineCheckbox",
         "ImageSelect",
         "MultiSelect",
         "SingleSelect",
         "TagSelect",
         "RefSelect",
+        "Progress",
         "code-editor",
         "html",
         "binary-link",
         "json-ref-select",
         "toggle",
         "duration"
-    );
+    )
 
     init {
         extend(
@@ -58,7 +60,7 @@ class WidgetCompletionContributor: CompletionContributor() {
                 resultSet: @NotNull CompletionResultSet
             ) {
                 for (widget in widgets) {
-                    resultSet.addElement(LookupElementBuilder.create(widget).withIcon(AllIcons.Nodes.Field));
+                    resultSet.addElement(LookupElementBuilder.create(widget).withIcon(AllIcons.Nodes.Field))
                 }
             }
         } )
