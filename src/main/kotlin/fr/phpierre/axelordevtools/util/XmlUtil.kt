@@ -15,6 +15,7 @@ import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.structuralsearch.impl.matcher.GlobalMatchingVisitor
 import com.intellij.util.indexing.FileBasedIndex
+import fr.phpierre.axelordevtools.indexes.ActionMethodNameIndex
 import fr.phpierre.axelordevtools.indexes.DomainPackageIndex
 import fr.phpierre.axelordevtools.indexes.SelectionNameIndex
 import fr.phpierre.axelordevtools.indexes.ViewNameIndex
@@ -303,7 +304,6 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
         fun findSelectionName(project: Project, selectionName: String): Set<PsiElement> {
             val results: MutableSet<PsiElement> = mutableSetOf()
-
             val files = FileBasedIndex.getInstance().getContainingFiles(SelectionNameIndex.KEY, selectionName, ProjectScope.getProjectScope(project))
 
             for (virtualFile in files) {
@@ -321,6 +321,53 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                     }
                 }
             }
+            return results
+        }
+
+        /**
+         * Explore a psiFile and find the name of every <action-method>.
+         * @param psiFile The view file
+         * @return A list of every action method's name in the file
+         */
+        fun indexAxelorActionMethodName(psiFile: PsiFile): Set<String> {
+            val results: MutableSet<String> = mutableSetOf()
+            if(psiFile !is XmlFile) {
+                return results
+            }
+
+            val rootTag: XmlTag? = psiFile.rootTag
+            rootTag?.subTags?.forEach { tag ->
+                if (tag.name == "action-method" || tag.name == "action-group") {
+                    val nameAttr = tag.getAttribute("name")
+                    if(nameAttr != null && nameAttr.value != null) {
+                        results.add(nameAttr.value!!)
+                    }
+                }
+            }
+
+            return results
+        }
+
+        fun findAction(project: Project, actionName: String): Set<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
+            val files = FileBasedIndex.getInstance().getContainingFiles(ActionMethodNameIndex.KEY, actionName, ProjectScope.getProjectScope(project))
+
+            for (virtualFile in files) {
+                val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
+                val rootTag: XmlTag? = (file as XmlFile).rootTag
+
+                val selections = rootTag?.findSubTags("action-method")
+
+                selections?.forEach { tag ->
+                    val attr = tag.getAttribute("name")
+                    attr?.value?.let {
+                        if(it == actionName) {
+                            results.add(attr)
+                        }
+                    }
+                }
+            }
+
             return results
         }
     }

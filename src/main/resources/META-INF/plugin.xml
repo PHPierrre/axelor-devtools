@@ -16,6 +16,7 @@
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.DomainPackageIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewNameIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.SelectionNameIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionMethodNameIndex" />
 
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.SelectionCompletionContributor"/>
@@ -27,6 +28,16 @@
         <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
 
         <editorNotificationProvider implementation="fr.phpierre.axelordevtools.notification.SetupGradleBuildTool" />
+
+        <!-- action-group et action ?????? : A TESTER-->
+
+        <!-- response:setValues Autocompletion des domaines + vérification des var existantes -->
+        <!--
+        1 : Lors de la detection que la méthode setValues est utilisé sur un objet ActionResponse (osef du nom de la var).
+        2 : Aller chercher l'action puis la vue et enfin vérifier si la variable est présente.
+        -->
+
+        <!-- Gestion du depends = variable utilisable dedans  + fonction multri args ","-->
 
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->

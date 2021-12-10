@@ -1,11 +1,11 @@
 package fr.phpierre.axelordevtools.references.xml
 
+import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.xml.XmlAttributeValueImpl
 import com.intellij.util.ProcessingContext
-import com.intellij.psi.PsiElement
 import fr.phpierre.axelordevtools.references.java.JavaMethodReference
 import fr.phpierre.axelordevtools.references.xml.condition.DefaultFieldCondition
 import fr.phpierre.axelordevtools.references.xml.condition.DumbFieldCondition
@@ -64,6 +64,9 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         // <panel-include ... view="xxx" .. />
         val PANEL_INCLUDE_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("view").withParent(XmlPatterns.psiElement().withName("panel-include")))
 
+        // <panel-dashlet ... view="xxx" .. />
+        val PANEL_DASHLET_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("panel-dashlet")))
+
         // <... grid-view="xxx" ..>
         val GRID_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("grid-view"))
 
@@ -71,7 +74,29 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         val FORM_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("form-view"))
 
         // When a xml attribute value target a view name.
-        val NAME_VIEW = PlatformPatterns.or(ACTION_VIEW_VIEW, PANEL_INCLUDE_VIEW, GRID_VIEW_VIEW, FORM_VIEW_VIEW)
+        val NAME_VIEW = PlatformPatterns.or(ACTION_VIEW_VIEW, PANEL_INCLUDE_VIEW, PANEL_DASHLET_VIEW, GRID_VIEW_VIEW, FORM_VIEW_VIEW)
+
+
+        val ACTION_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.psiElement().withName("action")))
+
+        val ON_CLICK_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onClick"))
+
+        val ON_CHANGE_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onChange"))
+
+        val ON_NEW_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onNew"))
+
+        val ON_EDIT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onEdit"))
+
+        val ON_DELETE_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onDelete"))
+
+        val ON_SELECT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onSelect"))
+
+        val ON_LOAD_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onLoad"))
+
+        val ON_TAB_SELECT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onTabSelect"))
+
+        val ACTION_VIEW = PlatformPatterns.or(ACTION_ACTION, ON_CLICK_ACTION, ON_CHANGE_ACTION, ON_NEW_ACTION, ON_EDIT_ACTION,
+            ON_DELETE_ACTION, ON_SELECT_ACTION, ON_LOAD_ACTION, ON_TAB_SELECT_ACTION)
 
         val AXELOR_VIEW = object : PsiReferenceProvider() {
             override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
@@ -122,6 +147,26 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 return arrayOf(JavaMethodReference(element))
             }
         }
+
+        val AXELOR_ACTION = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+                val results = mutableListOf<PsiReference>()
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                var oldIndex = 1
+                var index: Int = element.value.indexOf(",")
+                while (index >= 0) {
+                    results.add(ActionViewMethodReference(element, TextRange(oldIndex ,index +1)))
+                    oldIndex = index + 2
+                    index = element.value.indexOf(",", index + 1)
+                }
+                results.add(ActionViewMethodReference(element, TextRange(oldIndex , element.text.length -1)))
+
+                return results.toTypedArray()
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -130,5 +175,6 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
         registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)
+        registrar.registerReferenceProvider(ACTION_VIEW, AXELOR_ACTION)
     }
 }
