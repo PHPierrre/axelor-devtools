@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
 
-class XmlAttributeNameReference(@NotNull element: PsiElement) : PsiReferenceBase<PsiElement?>(element), PsiPolyVariantReference {
+class XmlFieldNameReference(@NotNull element: PsiElement) : PsiReferenceBase<PsiElement?>(element), PsiPolyVariantReference {
 
     @NotNull
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {

@@ -29,7 +29,7 @@
 
         <editorNotificationProvider implementation="fr.phpierre.axelordevtools.notification.SetupGradleBuildTool" />
 
-        <!-- action-group et action ?????? : A TESTER-->
+        <!-- auto-c in editor -->
 
         <!-- response:setValues Autocompletion des domaines + vérification des var existantes -->
         <!--
@@ -38,6 +38,7 @@
         -->
 
         <!-- Gestion du depends = variable utilisable dedans  + fonction multri args ","-->
+        <!-- Gestion des fields dummies : showIf, domain, etc etc -->
 
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->

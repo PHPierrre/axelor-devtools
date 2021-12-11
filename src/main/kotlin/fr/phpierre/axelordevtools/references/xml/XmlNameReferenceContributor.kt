@@ -28,13 +28,22 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
 
         // <field ... name="xxx" .... />
         // do not detect name that start with a dollar : <field ... name="$xxx" .... />
+        // do not detect fields inside <editor>
         val FIELD_NAME = XmlPatterns.xmlAttributeValue()
-                .with(ViewFileCondition("XML_VIEW_FILE"))
-                .with(DumbFieldCondition("XML_DUMMY_FIELD"))
-                .with(DefaultFieldCondition("XML_DEFAULT_FIELD"))
-                .withParent(XmlPatterns.xmlAttribute("name")
-                .withParent(XmlPatterns.xmlTag().withName("field")))
+            .with(ViewFileCondition("XML_VIEW_FILE"))
+            .with(DumbFieldCondition("XML_DUMMY_FIELD"))
+            .andNot(XmlPatterns.psiElement().withAncestor(15, XmlPatterns.xmlTag().withName("editor")))
+            .with(DefaultFieldCondition("XML_DEFAULT_FIELD"))
+            .withParent(XmlPatterns.xmlAttribute("name")
+            .withParent(XmlPatterns.xmlTag().withName("field")))
 
+        val FIELD_NAME_IN_EDITOR = XmlPatterns.xmlAttributeValue()
+            .with(ViewFileCondition("XML_VIEW_FILE"))
+            .with(DumbFieldCondition("XML_DUMMY_FIELD"))
+            .withAncestor(15, XmlPatterns.xmlTag().withName("editor"))
+            .with(DefaultFieldCondition("XML_DEFAULT_FIELD"))
+            .withParent(XmlPatterns.xmlAttribute("name")
+            .withParent(XmlPatterns.xmlTag().withName("field")))
         /**
          * <selection name="xxxx">
          *     <option ..></option>
@@ -124,7 +133,17 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 if(element !is XmlAttributeValueImpl)
                     return PsiReference.EMPTY_ARRAY
 
-                return arrayOf(XmlAttributeNameReference(element))
+                return arrayOf(XmlFieldNameReference(element))
+            }
+        }
+
+        val AXELOR_FIELD_IN_EDITOR = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(XmlEditorFieldNameReference(element))
             }
         }
 
@@ -173,6 +192,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(NAME_VIEW, AXELOR_VIEW)
         registrar.registerReferenceProvider(MODEL_DOMAIN, AXELOR_DOMAIN)
         registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
+        registrar.registerReferenceProvider(FIELD_NAME_IN_EDITOR, AXELOR_FIELD_IN_EDITOR)
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
         registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)
         registrar.registerReferenceProvider(ACTION_VIEW, AXELOR_ACTION)

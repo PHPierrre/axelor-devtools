@@ -10,6 +10,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.findDescendantOfType
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
@@ -356,7 +357,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
                 val rootTag: XmlTag? = (file as XmlFile).rootTag
 
-                val selections = rootTag?.findSubTags("action-method")
+                val selections = rootTag?.subTags
 
                 selections?.forEach { tag ->
                     val attr = tag.getAttribute("name")
@@ -369,6 +370,16 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             }
 
             return results
+        }
+
+        fun xmlParentField(element: PsiElement): String? {
+            var elementToExplore = PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
+
+            while(elementToExplore != null && elementToExplore.name != "field") {
+                elementToExplore = PsiTreeUtil.getParentOfType(elementToExplore, XmlTag::class.java)
+            }
+
+            return elementToExplore?.getAttributeValue("name")
         }
     }
 
