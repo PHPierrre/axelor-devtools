@@ -1,6 +1,15 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.0]
+
+- Action navigation + support multiple action in attribute value.
+- Action method navigation in java controller.
+- Editor field navigation
+- Warning message if your project is wrongly configured.
+- Add widgets name auto-completion
+- Fix : Tracking field in domain are not detected
+- Fix : Default field are not underlined
+- Fix : UUID field name
 
 ## [1.0.1]
 
