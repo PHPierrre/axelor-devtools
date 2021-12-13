@@ -96,6 +96,8 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
 
         val ON_EDIT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onEdit"))
 
+        val ON_SAVE_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onSave"))
+
         val ON_DELETE_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onDelete"))
 
         val ON_SELECT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onSelect"))
@@ -105,7 +107,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         val ON_TAB_SELECT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onTabSelect"))
 
         val ACTION_VIEW = PlatformPatterns.or(ACTION_ACTION, ON_CLICK_ACTION, ON_CHANGE_ACTION, ON_NEW_ACTION, ON_EDIT_ACTION,
-            ON_DELETE_ACTION, ON_SELECT_ACTION, ON_LOAD_ACTION, ON_TAB_SELECT_ACTION)
+                ON_SAVE_ACTION, ON_DELETE_ACTION, ON_SELECT_ACTION, ON_LOAD_ACTION, ON_TAB_SELECT_ACTION)
 
         val AXELOR_VIEW = object : PsiReferenceProvider() {
             override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
