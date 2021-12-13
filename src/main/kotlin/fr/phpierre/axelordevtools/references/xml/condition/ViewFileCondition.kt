@@ -12,7 +12,7 @@ class ViewFileCondition(@NotNull vararg keys: String) :
         @NotNull element: PsiElement,
         context: ProcessingContext
     ): Boolean {
-        val path = element.containingFile?.containingDirectory?.name
+        val path = element.containingFile?.originalFile?.containingDirectory?.name
 
         return (path == "views")
     }

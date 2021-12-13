@@ -21,7 +21,7 @@ class XmlEditorFieldNameReference(@NotNull element: PsiElement) : PsiReferenceBa
         val parent = XmlUtil.xmlParentField(element.parent.parent)
 
         parent?.let {
-            val properties: Set<PsiElement> = XmlUtil.findFieldFromModelName(project, "$parent.$key", modelName)
+            val properties: Set<PsiElement> = XmlUtil.findFieldFromModelName(project, "$parent.$key", modelName, XmlUtil.FieldSearch.MATCH)
             for (property in properties) {
                 results.add(PsiElementResolveResult(property))
             }

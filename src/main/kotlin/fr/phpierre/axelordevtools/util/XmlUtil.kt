@@ -24,19 +24,26 @@ import fr.phpierre.axelordevtools.indexes.ViewNameIndex
 
 class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
+    enum class FieldSearch{
+        ALL, MATCH;
+    }
+
     companion object {
 
         /**
-         * Find the existant field in a domain and his parents.
+         * Find the existent field in a domain and his parents.
+         * Can be used to verify that the key exist in a domain name.
          * @param project The project
          * @param key The field name
          * @param modelName The domain name (package.class)
+         * @param searchParam The search parameter
          * @return A set of fields found
          */
         fun findFieldFromModelName(
             project: Project,
             key: String,
-            modelName: String
+            modelName: String,
+            searchParam: FieldSearch
         ): Set<PsiElement> {
             val result: MutableSet<PsiElement> = mutableSetOf()
 
@@ -45,20 +52,23 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             for (virtualFile in files) {
                 val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
 
-                result.addAll(getFieldFromFile(file, key))
+                result.addAll(getFieldFromFile(file, key, searchParam))
             }
             return result
         }
 
         /**
-         * Find if a field name exist in a domain and his parents
+         * Find if a field name exist in a file and his parents
+         * Can be used to verify that the key exist in a domain name.
          * @param file The domain file
          * @param key The field name
+         * @param searchParam The search parameter
          * @return A set of fields found
          */
         private fun getFieldFromFile(
             file: PsiFile?,
-            key: String
+            key: String,
+            searchParam: FieldSearch
         ): Set<PsiElement> {
             val results: MutableSet<PsiElement> = mutableSetOf()
 
@@ -67,7 +77,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             entity.getAttribute("extends")?.let {
                 it.value?.let { value ->
-                    results.addAll(findFieldFromModelName(file.project, key, value))
+                    results.addAll(findFieldFromModelName(file.project, key, value, searchParam))
                 }
             }
 
@@ -79,13 +89,17 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 for (relation in relations) {
                     val ref = (relation.parent as XmlTag).getAttribute("ref")
                     ref?.value?.let {
-                        results.addAll(findFieldFromModelName(file.project,tail, it))
+                        results.addAll(findFieldFromModelName(file.project,tail, it, searchParam))
                     }
                 }
             }
             // Else it's a simple field
             else {
-                results.addAll(searchFieldInEntity(entity, key))
+                if(searchParam == FieldSearch.MATCH) {
+                    results.addAll(searchFieldInEntity(entity, key))
+                } else if(searchParam == FieldSearch.ALL) {
+                    results.addAll(searchFieldsInEntity(entity))
+                }
             }
 
             return results
@@ -102,6 +116,21 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                     if (attribute.value == key) {
                         results.add(attribute)
                     }
+                }
+            }
+
+            return results
+        }
+
+        private fun searchFieldsInEntity(
+                entity: XmlTag
+        ): Set<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
+
+            entity.subTags.forEach { tag ->
+                val nameAttr = tag.getAttribute("name")
+                nameAttr?.let { name ->
+                    results.add(name)
                 }
             }
 
@@ -173,10 +202,27 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
         /**
          * Get fields of a domain and his parent domains.
-         * @param psiFile The domain file
+         * @param project The project.
+         * @param modelName The model name.
          * @return A list with every field found.
          */
-        fun getFieldsFromDomain(psiFile: PsiFile): MutableSet<PsiElement> {
+        fun getFieldsFromDomain(project: Project, modelName: String): MutableSet<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
+            val files = FileBasedIndex.getInstance().getContainingFiles(DomainPackageIndex.KEY, modelName, ProjectScope.getProjectScope(project))
+            for (virtualFile in files) {
+                val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
+                file?.let { results.addAll(getFieldsFromDomain(file)) }
+            }
+
+            return results
+        }
+
+        /**
+         * Get fields of a domain and his parent domains.
+         * @param psiFile The domain file.
+         * @return A list with every field found.
+         */
+        private fun getFieldsFromDomain(psiFile: PsiFile): MutableSet<PsiElement> {
             val results: MutableSet<PsiElement> = mutableSetOf()
             if(psiFile !is XmlFile) {
                 return results
@@ -187,24 +233,12 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             entity.getAttribute("extends")?.let {
                 it.value?.let { value ->
-                    val files = FileBasedIndex.getInstance().getContainingFiles(DomainPackageIndex.KEY, value, ProjectScope.getProjectScope(psiFile.project))
-                    for (virtualFile in files) {
-                        val psiFileParent: PsiFile? = PsiManager.getInstance(psiFile.project).findFile(virtualFile)
-                        psiFileParent?.let { file -> results.addAll(getFieldsFromDomain(file)) }
-                    }
+                    results.addAll(getFieldsFromDomain(psiFile.project, value))
                 }
             }
 
-            entity.let {
-                it.subTags.let { tags ->
-                    tags.forEach { tag ->
-                        val nameAttr = tag.getAttribute("name")
-                        nameAttr?.let { name ->
-                            results.add(name)
-                        }
-                    }
-                }
-            }
+            results.addAll(searchFieldsInEntity(entity))
+
             return results
         }
 
