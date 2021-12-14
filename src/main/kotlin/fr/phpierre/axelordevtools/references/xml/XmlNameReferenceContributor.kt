@@ -26,6 +26,10 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
 
         val MODEL_DOMAIN = PlatformPatterns.or(MODEL_NAME, REF_DOMAIN, EXTENDS_ENTITY)
 
+
+        // <panel-related field="xxxxx">
+        val PANEL_RELATED_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("field").withParent(XmlPatterns.psiElement().withName("panel-related")))
+
         // <field ... name="xxx" .... />
         // do not detect name that start with a dollar : <field ... name="$xxx" .... />
         // do not detect fields inside <editor>
@@ -73,7 +77,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         // <panel-include ... view="xxx" .. />
         val PANEL_INCLUDE_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("view").withParent(XmlPatterns.psiElement().withName("panel-include")))
 
-        // <panel-dashlet ... view="xxx" .. />
+        // <panel-dashlet ... action="xxx" .. />
         val PANEL_DASHLET_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("panel-dashlet")))
 
         // <... grid-view="xxx" ..>
@@ -193,7 +197,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(NAME_VIEW, AXELOR_VIEW)
         registrar.registerReferenceProvider(MODEL_DOMAIN, AXELOR_DOMAIN)
-        registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
+        registrar.registerReferenceProvider(FIELD_NAME.andOr(PANEL_RELATED_VIEW), AXELOR_FIELD)
         registrar.registerReferenceProvider(FIELD_NAME_IN_EDITOR, AXELOR_FIELD_IN_EDITOR)
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
         registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)

@@ -10,7 +10,6 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.findDescendantOfType
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
@@ -20,6 +19,7 @@ import fr.phpierre.axelordevtools.indexes.ActionMethodNameIndex
 import fr.phpierre.axelordevtools.indexes.DomainPackageIndex
 import fr.phpierre.axelordevtools.indexes.SelectionNameIndex
 import fr.phpierre.axelordevtools.indexes.ViewNameIndex
+import fr.phpierre.axelordevtools.lang.XmlTagLang
 
 
 class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
@@ -191,9 +191,11 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             val rootTag: XmlTag? = psiFile.rootTag
             rootTag?.subTags?.forEach { tag ->
-                val nameAttr = tag.getAttribute("name")
-                if(nameAttr != null && nameAttr.value != null) {
-                    results.add(nameAttr.value!!)
+                if (XmlTagLang.viewType.contains(tag.name)) {
+                    val nameAttr = tag.getAttribute("name")
+                    if (nameAttr != null && nameAttr.value != null) {
+                        results.add(nameAttr.value!!)
+                    }
                 }
             }
 
@@ -372,7 +374,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             val rootTag: XmlTag? = psiFile.rootTag
             rootTag?.subTags?.forEach { tag ->
-                if (tag.name == "action-method" || tag.name == "action-group") {
+                if (tag.name == "action-method" || tag.name == "action-group" || tag.name == "action-view" || tag.name == "action-ws") {
                     val nameAttr = tag.getAttribute("name")
                     if(nameAttr != null && nameAttr.value != null) {
                         results.add(nameAttr.value!!)

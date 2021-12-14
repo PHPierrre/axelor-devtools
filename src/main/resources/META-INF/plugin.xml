@@ -18,11 +18,13 @@
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.SelectionNameIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionMethodNameIndex" />
 
-        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
-        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.SelectionCompletionContributor"/>
-        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ModelCompletionContributor"/>
-        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ViewParamCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ActionCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.DomainCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ModelCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.SelectionCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ViewCompletionContributor"/>
+        <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ViewParamCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.WidgetCompletionContributor"/>
 
         <lang.foldingBuilder language="JAVA" implementationClass="fr.phpierre.axelordevtools.folding.PropertiesFoldingBuilder" />
@@ -30,6 +32,10 @@
         <editorNotificationProvider implementation="fr.phpierre.axelordevtools.notification.SetupGradleBuildTool" />
 
         <!-- auto-c in editor -->
+        <!-- + relation pour auto-c in editor -->
+        <!--
+        OSEF :
+        bug in editor, if field name == parent, marche pas -->
 
         <!-- response:setValues Autocompletion des domaines + vérification des var existantes -->
         <!--
