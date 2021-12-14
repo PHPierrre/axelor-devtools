@@ -197,7 +197,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(NAME_VIEW, AXELOR_VIEW)
         registrar.registerReferenceProvider(MODEL_DOMAIN, AXELOR_DOMAIN)
-        registrar.registerReferenceProvider(FIELD_NAME.andOr(PANEL_RELATED_VIEW), AXELOR_FIELD)
+        registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
         registrar.registerReferenceProvider(FIELD_NAME_IN_EDITOR, AXELOR_FIELD_IN_EDITOR)
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
         registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)
