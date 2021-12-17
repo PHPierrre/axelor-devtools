@@ -47,7 +47,8 @@ class WidgetCompletionContributor: CompletionContributor() {
         "binary-link",
         "json-ref-select",
         "toggle",
-        "duration"
+        "duration",
+        "info-button"
     )
 
     init {
