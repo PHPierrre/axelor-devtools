@@ -8,6 +8,9 @@
     <depends>com.intellij.properties</depends>
     <depends>com.intellij.java</depends>
     <depends>com.intellij.gradle</depends>
+    <depends optional="true" config-file="axelor-injections.xml">
+        org.intellij.intelliLang
+    </depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- https://plugins.jetbrains.com/docs/intellij/extension-point-list.html#corexml -->
@@ -33,9 +36,7 @@
 
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
-        <!--
-        OSEF :
-        bug in editor, if field name == parent, marche pas -->
+        <!--OSEF : bug in editor, if field name == parent, marche pas -->
 
         <!-- response:setValues Autocompletion des domaines + vérification des var existantes -->
         <!--
@@ -46,8 +47,23 @@
         <!-- Gestion du depends = variable utilisable dedans  + fonction multri args ","-->
         <!-- Gestion des fields dummies : showIf, domain, etc etc -->
 
+        <!--
+            Gestion des dummies :
+
+            - Pour les hilite (dans le grid), il faut que le champs soit présent.
+            Donc si : <hilite background="danger" if="picking == null"/>
+            alors ca doit etre présent : <field name="picking"/>
+            Attention, <field name="picking.name"/> ne fonctionne pas !
+
+            - ShowIf, si un champs est présent, il doit etre aussi présent dans la vue.
+            Gestion du dummies et de sa relation : A tester (cf exemple au dessus)
+        -->
+
         <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
+    </extensions>
+    <extensions defaultExtensionNs="org.intellij.intelliLang">
+        <injectionConfig config="axelor-injections.xml"/>
     </extensions>
 
     <applicationListeners>

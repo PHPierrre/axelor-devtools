@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="LanguageInjectionConfiguration">
+    <injection language="HTML" injector-id="xml">
+        <display-name>Viewer CDATA (Axelor XML views)</display-name>
+        <place><![CDATA[
+            xmlTag().withName("viewer").withParent(xmlTag().withName("field"))
+            ]]>
+        </place>
+        <!--<prefix></prefix>
+        <suffix></suffix>-->
+    </injection>
+    <injection language="Groovy" injector-id="xml">
+        <display-name>Expr (Axelor XML views)</display-name>
+        <place><![CDATA[
+            xmlAttribute().withName("expr")
+            ]]>
+        </place>
+        <!--<prefix></prefix>
+        <suffix></suffix>-->
+    </injection>
+</component>
