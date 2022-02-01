@@ -10,7 +10,12 @@ import com.intellij.util.io.VoidDataExternalizer
 import fr.phpierre.axelordevtools.util.XmlUtil
 import gnu.trove.THashMap
 
-class ActionMethodNameIndex : FileBasedIndexExtension<String, Void?>() {
+class ActionNameIndex : FileBasedIndexExtension<String, Void?>() {
+
+    companion object {
+        val KEY =
+            ID.create<String, Void?>("axelor.actions.name")
+    }
 
     override fun getName(): ID<String, Void?> {
         return KEY
@@ -51,8 +56,4 @@ class ActionMethodNameIndex : FileBasedIndexExtension<String, Void?>() {
         return true
     }
 
-    companion object {
-        val KEY =
-            ID.create<String, Void?>("axelor.action-method.name")
-    }
 }

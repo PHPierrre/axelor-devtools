@@ -14,6 +14,22 @@ class XmlTagLang {
                 "gantt",
                 "dashboard")
 
+        val actionType = setOf(
+            "action-view",
+            "action-attrs",
+            "action-record",
+            "action-method",
+            "action-script",
+            "action-validate",
+            "action-condition",
+            "action-group",
+            "action-import",
+            "action-export",
+            "action-ws"
+        )
 
+        val actionEvents = setOf("onNew", "onLoad", "onLoad", "onSave", "onDelete", "onChange", "onSelect", "onClick", "onTabSelect")
+
+        val viewReferences = setOf("from-view", "grid-view", "view")
     }
 }

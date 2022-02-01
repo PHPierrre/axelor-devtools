@@ -11,6 +11,12 @@ import fr.phpierre.axelordevtools.util.XmlUtil.Companion.getPackageNameOfDomain
 import gnu.trove.THashMap
 
 class DomainPackageIndex : FileBasedIndexExtension<String, Void?>() {
+
+    companion object {
+        val KEY =
+            ID.create<String, Void?>("axelor.domains.name")
+    }
+
     override fun getName(): ID<String, Void?> {
         return KEY
     }
@@ -50,8 +56,4 @@ class DomainPackageIndex : FileBasedIndexExtension<String, Void?>() {
         return true
     }
 
-    companion object {
-        val KEY =
-            ID.create<String, Void?>("axelor.domains.name")
-    }
 }

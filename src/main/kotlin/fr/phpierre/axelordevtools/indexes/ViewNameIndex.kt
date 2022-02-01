@@ -11,6 +11,12 @@ import fr.phpierre.axelordevtools.util.XmlUtil.Companion.indexAxelorViewName
 import gnu.trove.THashMap
 
 class ViewNameIndex : FileBasedIndexExtension<String, Void?>() {
+
+    companion object {
+        val KEY =
+            ID.create<String, Void?>("axelor.views.name")
+    }
+
     override fun getName(): ID<String, Void?> {
         return KEY
     }
@@ -48,10 +54,5 @@ class ViewNameIndex : FileBasedIndexExtension<String, Void?>() {
 
     override fun dependsOnFileContent(): Boolean {
         return true
-    }
-
-    companion object {
-        val KEY =
-            ID.create<String, Void?>("axelor.views.name")
     }
 }

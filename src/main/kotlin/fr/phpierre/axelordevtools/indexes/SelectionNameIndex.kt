@@ -14,7 +14,7 @@ class SelectionNameIndex : FileBasedIndexExtension<String, Void?>() {
 
     companion object {
         val KEY =
-            ID.create<String, Void?>("axelor.selection.name")
+            ID.create<String, Void?>("axelor.selections.name")
     }
 
     override fun getName(): ID<String, Void?> {
