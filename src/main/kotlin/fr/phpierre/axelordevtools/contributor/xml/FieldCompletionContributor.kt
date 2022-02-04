@@ -76,7 +76,7 @@ class FieldCompletionContributor : CompletionContributor() {
                                 }
 
                                 // Create an item with the field name, an icon and a type
-                                var item = LookupElementBuilder.create(fieldName).withIcon(AxelorIcons.Logo).withTypeText(" ${parent.name}")
+                                var item = LookupElementBuilder.create(fieldName).withIcon(AxelorIcons.fieldIcon).withTypeText(" ${parent.name}")
 
                                 // Add information title
                                 parent.getAttribute("title")?.let { titleAttr ->
@@ -110,7 +110,7 @@ class FieldCompletionContributor : CompletionContributor() {
     private fun addDefaultFields(prefix: String, resultSet: CompletionResultSet) {
         for(field in defaultColumns) {
             resultSet.addElement(LookupElementBuilder.create(prefix + field)
-                .withIcon(AxelorIcons.Logo))
+                .withIcon(AxelorIcons.fieldIcon))
         }
     }
 

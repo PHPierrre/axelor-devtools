@@ -43,7 +43,7 @@ class ActionCompletionContributor : CompletionContributor() {
                                         val type = tag.name
                                         resultSet.addElement(
                                                 LookupElementBuilder.create(key)
-                                                        .withIcon(AxelorIcons.Logo)
+                                                        .withIcon(AxelorIcons.actionIcon)
                                                         .withTypeText(type)
                                                         .withTailText(title)
 
