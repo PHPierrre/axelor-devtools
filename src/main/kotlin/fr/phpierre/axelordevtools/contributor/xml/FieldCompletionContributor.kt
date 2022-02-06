@@ -2,20 +2,13 @@ package fr.phpierre.axelordevtools.contributor.xml
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.lang.xml.XMLLanguage
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
-import com.intellij.psi.impl.source.xml.XmlAttributeImpl
-import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
-import com.intellij.util.indexing.FileBasedIndex
 import fr.phpierre.axelordevtools.icons.AxelorIcons
-import fr.phpierre.axelordevtools.indexes.DomainPackageIndex
 import fr.phpierre.axelordevtools.references.xml.XmlNameReferenceContributor
 import fr.phpierre.axelordevtools.util.PsiElementUtil
 import fr.phpierre.axelordevtools.util.XmlUtil
@@ -112,7 +105,7 @@ class FieldCompletionContributor : CompletionContributor() {
         var relationType = ""
         var javaType = ""
 
-        if(listOf("many-to-many", "one-to-many", "many-to-one", "one-to-one").contains(xmlType)) {
+        if(relationTag.contains(xmlType)) {
             extractJavaType(xmlField)?.let {
                 javaType = it
             }
