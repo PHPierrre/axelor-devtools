@@ -76,11 +76,11 @@ class FieldCompletionContributor : CompletionContributor() {
                                 }
 
                                 // Create an item with the field name, an icon and a type
-                                var item = LookupElementBuilder.create(fieldName).withIcon(AxelorIcons.fieldIcon).withTypeText(" ${parent.name}")
+                                var item = LookupElementBuilder.create(fieldName).withIcon(AxelorIcons.fieldIcon).withTypeText(formatType(parent))
 
                                 // Add information title
                                 parent.getAttribute("title")?.let { titleAttr ->
-                                    titleAttr.value?.let { titleText -> item = item.withTailText(titleText) }
+                                    titleAttr.value?.let { titleText -> item = item.withTailText(" $titleText") }
                                 }
 
                                 // Add color if it's a relation
@@ -105,6 +105,38 @@ class FieldCompletionContributor : CompletionContributor() {
                 }
             }
         )
+    }
+
+    private fun formatType(xmlField: XmlTag): String {
+        val xmlType = xmlField.name
+        var relationType = ""
+        var javaType = ""
+
+        if(listOf("many-to-many", "one-to-many", "many-to-one", "one-to-one").contains(xmlType)) {
+            extractJavaType(xmlField)?.let {
+                javaType = it
+            }
+        }
+
+        if (xmlType == "many-to-many") {
+            javaType = "List<$javaType>"
+            relationType = " (m2m)"
+        } else if (xmlType == "one-to-many") {
+            javaType = "List<$javaType>"
+            relationType = " (o2m)"
+        } else if (xmlType == "many-to-one") {
+            relationType = " (m2o)"
+        } else if(xmlType == "one-to-one") {
+            relationType = " (o2o)"
+        } else {
+            relationType = xmlField.name
+        }
+
+        return "$javaType$relationType"
+    }
+
+    private fun extractJavaType(xmlField: XmlTag): String? {
+        return xmlField.getAttribute("ref")?.value?.substringAfterLast(".")
     }
 
     private fun addDefaultFields(prefix: String, resultSet: CompletionResultSet) {
