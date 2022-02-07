@@ -10,16 +10,18 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.PsiUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.structuralsearch.impl.matcher.GlobalMatchingVisitor
 import com.intellij.util.indexing.FileBasedIndex
-import fr.phpierre.axelordevtools.indexes.ActionMethodNameIndex
-import fr.phpierre.axelordevtools.indexes.DomainPackageIndex
-import fr.phpierre.axelordevtools.indexes.SelectionNameIndex
-import fr.phpierre.axelordevtools.indexes.ViewNameIndex
+import fr.phpierre.axelordevtools.indexes.*
 import fr.phpierre.axelordevtools.lang.XmlTagLang
+import fr.phpierre.axelordevtools.objects.MetaReference
+import fr.phpierre.axelordevtools.objects.xml.AbstractAction
+import fr.phpierre.axelordevtools.objects.xml.XmlParentActionReference
+import fr.phpierre.axelordevtools.objects.xml.XmlParentViewReference
 
 
 class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
@@ -387,7 +389,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
         fun findAction(project: Project, actionName: String): Set<PsiElement> {
             val results: MutableSet<PsiElement> = mutableSetOf()
-            val files = FileBasedIndex.getInstance().getContainingFiles(ActionMethodNameIndex.KEY, actionName, ProjectScope.getProjectScope(project))
+            val files = FileBasedIndex.getInstance().getContainingFiles(ActionNameIndex.KEY, actionName, ProjectScope.getProjectScope(project))
 
             for (virtualFile in files) {
                 val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
@@ -416,6 +418,87 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             }
 
             return elementToExplore?.getAttributeValue("name")
+        }
+
+        fun referenceAxelorViews(psiFile: PsiFile): Set<MetaReference> {
+            val references: MutableSet<MetaReference> = mutableSetOf()
+            if(psiFile !is XmlFile) {
+                return references
+            }
+
+            val rootTag: XmlTag? = psiFile.rootTag
+            // For each attribute in the file, we search if it references to a view with filter()
+            val tags = PsiTreeUtil.findChildrenOfAnyType(rootTag, XmlTag::class.java)
+
+            tags.filter {
+                XmlTagLang.viewReferences.contains(it.name)
+            }.forEach {
+                val tag: XmlParentViewReference = (XmlTagLang.viewReferences[it.name]?.constructors?.get(0)?.newInstance(it) as XmlParentViewReference)
+                references.addAll(tag.getViewReferences())
+            }
+
+            return references
+        }
+
+        fun referenceAxelorActions(psiFile: PsiFile): Set<MetaReference> {
+            val references: MutableSet<MetaReference> = mutableSetOf()
+            if(psiFile !is XmlFile) {
+                return references
+            }
+
+            val rootTag: XmlTag? = psiFile.rootTag
+            val tags = PsiTreeUtil.findChildrenOfAnyType(rootTag, XmlTag::class.java)
+
+            tags.filter {
+                XmlTagLang.actionReferences.contains(it.name)
+            }.forEach {
+                val tag: XmlParentActionReference = (XmlTagLang.actionReferences[it.name]?.constructors?.get(0)?.newInstance(it) as XmlParentActionReference)
+                references.addAll(tag.getActionReferences())
+            }
+
+            return references
+        }
+
+        fun findViewReference(project: Project, viewName: String): List<PsiElement> {
+            val result: MutableList<PsiElement> = ArrayList()
+
+            val files = FileBasedIndex.getInstance().getContainingFiles(ViewReferencesIndex.KEY, viewName, ProjectScope.getProjectScope(project))
+            for (virtualFile in files) {
+                val datas = FileBasedIndex.getInstance().getFileData(ViewReferencesIndex.KEY, virtualFile, project)
+
+                datas.entries.forEach { (key, value) ->
+                    val psiFile = PsiManager.getInstance(project).findFile(virtualFile)
+                    val psiElement = PsiUtil.getElementAtOffset(psiFile!!, value)
+                    val nameFound = (psiElement.parent as XmlAttribute).value
+                    nameFound?.let {
+                        if(it == viewName) {
+                            result.add(psiElement)
+                        }
+                    }
+                }
+            }
+            return result
+        }
+
+        fun findActionReference(project: Project, viewName: String): List<PsiElement> {
+            val result: MutableList<PsiElement> = ArrayList()
+
+            val files = FileBasedIndex.getInstance().getContainingFiles(ActionReferencesIndex.KEY, viewName, ProjectScope.getProjectScope(project))
+            for (virtualFile in files) {
+                val datas = FileBasedIndex.getInstance().getFileData(ActionReferencesIndex.KEY, virtualFile, project)
+
+                datas.entries.forEach { (key, value) ->
+                    val psiFile = PsiManager.getInstance(project).findFile(virtualFile)
+                    val psiElement = PsiUtil.getElementAtOffset(psiFile!!, value)
+                    val namesFound = (psiElement.parent as XmlAttribute).value?.split(",")
+                    namesFound?.forEach {
+                        if(it == viewName) {
+                            result.add(psiElement)
+                        }
+                    }
+                }
+            }
+            return result
         }
     }
 

@@ -15,6 +15,16 @@ import fr.phpierre.axelordevtools.references.xml.condition.ViewFileCondition
 class XmlNameReferenceContributor : PsiReferenceContributor() {
 
     companion object {
+
+        // <form|grid name="xxxxx" ....>
+        val VIEW_REFERENCE = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.xmlTag().withName("grid", "form", "")))
+
+        // <action-view,action-attrs,action-record,action-method ...>
+        val ACTIONS_NAME = XmlPatterns.xmlAttributeValue()
+            .withParent(XmlPatterns.xmlAttribute("name")
+            .withParent(XmlPatterns.xmlTag().withName("action-view", "action-attrs", "action-record", "action-method",
+            "action-script", "action-validate", "action-condition", "action-group", "action-import", "action-export", "action-ws")))
+
         // <... model="xxx" ...>
         val MODEL_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("model"))
 
@@ -192,6 +202,26 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 return results.toTypedArray()
             }
         }
+
+        val AXELOR_VIEW_REFERENCE = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(AxelorViewReference(element))
+            }
+        }
+
+        val AXELOR_ACTION_REFERENCE = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(AxelorActionReference(element))
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -202,5 +232,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
         registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)
         registrar.registerReferenceProvider(ACTION_VIEW, AXELOR_ACTION)
+        registrar.registerReferenceProvider(VIEW_REFERENCE, AXELOR_VIEW_REFERENCE)
+        registrar.registerReferenceProvider(ACTIONS_NAME, AXELOR_ACTION_REFERENCE)
     }
 }

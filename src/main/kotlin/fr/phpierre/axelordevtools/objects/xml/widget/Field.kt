@@ -1,12 +1,11 @@
 package fr.phpierre.axelordevtools.objects.xml.widget
 
-import com.intellij.psi.PsiElement
 import com.intellij.psi.xml.XmlTag
-import com.intellij.refactoring.suggested.startOffset
 import fr.phpierre.axelordevtools.objects.MetaReference
-import fr.phpierre.axelordevtools.objects.xml.XmlHaveParent
+import fr.phpierre.axelordevtools.objects.xml.XmlParentActionReference
+import fr.phpierre.axelordevtools.objects.xml.XmlParentViewReference
 
-class Field(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlHaveParent {
+class Field(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlParentViewReference, XmlParentActionReference {
 
     fun getFormViewReference(): MetaReference? {
         return getMetaReference("form-view")
@@ -16,13 +15,32 @@ class Field(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlHaveParent {
         return getMetaReference("grid-view")
     }
 
-    override fun getReferences(): List<MetaReference> {
+    override fun getViewReferences(): List<MetaReference> {
         val references: MutableList<MetaReference> = mutableListOf()
         getGridViewReference()?.let {
             references.add(it)
         }
         getFormViewReference()?.let {
             references.add(it)
+        }
+        return references
+    }
+
+    fun getOnChangeReferences(): List<MetaReference>? {
+        return getMetaReferences("onChange")
+    }
+
+    fun getOnSelectReferences(): List<MetaReference>? {
+        return getMetaReferences("onSelect")
+    }
+
+    override fun getActionReferences(): List<MetaReference> {
+        val references: MutableList<MetaReference> = mutableListOf()
+        getOnChangeReferences()?.let {
+            references.addAll(it)
+        }
+        getOnSelectReferences()?.let{
+            references.addAll(it)
         }
         return references
     }

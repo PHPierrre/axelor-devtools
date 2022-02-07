@@ -19,7 +19,9 @@
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.DomainPackageIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewNameIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.SelectionNameIndex" />
-        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionMethodNameIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionNameIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewReferencesIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionReferencesIndex" />
 
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ActionCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.DomainCompletionContributor"/>
@@ -59,7 +61,7 @@
             Gestion du dummies et de sa relation : A tester (cf exemple au dessus)
         -->
 
-        <!-- TODO: utilisation du champs : via <gotoDeclarationHandler implementation="" />-->
+        <!-- TODO: utilisation du champs : via FindUsagesProvider  -->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
     </extensions>
     <extensions defaultExtensionNs="org.intellij.intelliLang">

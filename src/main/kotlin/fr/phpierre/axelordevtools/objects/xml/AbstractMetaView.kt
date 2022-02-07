@@ -2,11 +2,10 @@ package fr.phpierre.axelordevtools.objects.xml
 
 import com.intellij.psi.xml.XmlTag
 import fr.phpierre.axelordevtools.objects.MetaReference
-import javax.xml.bind.annotation.XmlAttribute
 
-abstract class AbstractMetaView(xmlTag: XmlTag) : AbstractXML(xmlTag), XmlHaveParent {
+abstract class AbstractMetaView(xmlTag: XmlTag) : AbstractXML(xmlTag), XmlParentViewReference {
 
-    override fun getReferences(): List<MetaReference> {
+    override fun getViewReferences(): List<MetaReference> {
         val references: MutableList<MetaReference> = mutableListOf()
         getNameReference()?.let {
             references.add(it)

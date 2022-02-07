@@ -1,18 +1,17 @@
-package fr.phpierre.axelordevtools.objects.xml.view
+package fr.phpierre.axelordevtools.objects.xml.widget
 
 import com.intellij.psi.xml.XmlTag
 import fr.phpierre.axelordevtools.objects.MetaReference
-import fr.phpierre.axelordevtools.objects.xml.AbstractMetaView
 import fr.phpierre.axelordevtools.objects.xml.XmlParentActionReference
 
-class MetaGridView(xmlTag: XmlTag) : AbstractMetaView(xmlTag), XmlParentActionReference {
-    fun getOnNewActionReference(): List<MetaReference>? {
-        return getMetaReferences("onNew")
+class Button(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlParentActionReference {
+    fun getOnClickReferences(): List<MetaReference>? {
+        return getMetaReferences("onClick")
     }
 
     override fun getActionReferences(): List<MetaReference> {
         val references: MutableList<MetaReference> = mutableListOf()
-        getOnNewActionReference()?.let {
+        getOnClickReferences()?.let {
             references.addAll(it)
         }
         return references
