@@ -19,8 +19,8 @@ import com.intellij.util.indexing.FileBasedIndex
 import fr.phpierre.axelordevtools.indexes.*
 import fr.phpierre.axelordevtools.lang.XmlTagLang
 import fr.phpierre.axelordevtools.objects.MetaReference
-import fr.phpierre.axelordevtools.objects.xml.AbstractAction
 import fr.phpierre.axelordevtools.objects.xml.XmlParentActionReference
+import fr.phpierre.axelordevtools.objects.xml.XmlParentSelectionReference
 import fr.phpierre.axelordevtools.objects.xml.XmlParentViewReference
 
 
@@ -459,6 +459,28 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return references
         }
 
+        fun referenceSelection(psiFile: PsiFile): Set<MetaReference> {
+            val references: MutableSet<MetaReference> = mutableSetOf()
+            if(psiFile !is XmlFile) {
+                return references
+            }
+
+            val rootTag: XmlTag? = psiFile.rootTag
+            // For each attribute in the file, we search if it references to a view with filter()
+            val tags = PsiTreeUtil.findChildrenOfAnyType(rootTag, XmlTag::class.java)
+
+            tags.filter {
+                XmlTagLang.selectionReferences.contains(it.name)
+            }.forEach {
+                val tag: XmlParentSelectionReference = (XmlTagLang.selectionReferences[it.name]?.constructors?.get(0)?.newInstance(it) as XmlParentSelectionReference)
+                tag.getSelectionReferences()?.let { ref ->
+                    references.add(ref)
+                }
+            }
+
+            return references
+        }
+
         fun findViewReference(project: Project, viewName: String): List<PsiElement> {
             val result: MutableList<PsiElement> = ArrayList()
 
@@ -480,10 +502,10 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return result
         }
 
-        fun findActionReference(project: Project, viewName: String): List<PsiElement> {
+        fun findActionReference(project: Project, actionName: String): List<PsiElement> {
             val result: MutableList<PsiElement> = ArrayList()
 
-            val files = FileBasedIndex.getInstance().getContainingFiles(ActionReferencesIndex.KEY, viewName, ProjectScope.getProjectScope(project))
+            val files = FileBasedIndex.getInstance().getContainingFiles(ActionReferencesIndex.KEY, actionName, ProjectScope.getProjectScope(project))
             for (virtualFile in files) {
                 val datas = FileBasedIndex.getInstance().getFileData(ActionReferencesIndex.KEY, virtualFile, project)
 
@@ -492,9 +514,27 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                     val psiElement = PsiUtil.getElementAtOffset(psiFile!!, value)
                     val namesFound = (psiElement.parent as XmlAttribute).value?.split(",")
                     namesFound?.forEach {
-                        if(it == viewName) {
+                        if (it == actionName) {
                             result.add(psiElement)
                         }
+                    }
+                }
+            }
+            return result
+        }
+
+        fun findSelectionReference(project: Project, selectionName: String): List<PsiElement> {
+            val result: MutableList<PsiElement> = ArrayList()
+
+            val files = FileBasedIndex.getInstance().getContainingFiles(SelectionReferenceIndex.KEY, selectionName, ProjectScope.getProjectScope(project))
+            for (virtualFile in files) {
+                val datas = FileBasedIndex.getInstance().getFileData(SelectionReferenceIndex.KEY, virtualFile, project)
+
+                datas.entries.forEach { (key, value) ->
+                    val psiFile = PsiManager.getInstance(project).findFile(virtualFile)
+                    val psiElement = PsiUtil.getElementAtOffset(psiFile!!, value)
+                    if(key == selectionName) {
+                        result.add(psiElement)
                     }
                 }
             }

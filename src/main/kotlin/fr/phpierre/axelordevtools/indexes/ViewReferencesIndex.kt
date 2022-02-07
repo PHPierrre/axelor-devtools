@@ -2,7 +2,6 @@ package fr.phpierre.axelordevtools.indexes
 
 import com.intellij.ide.highlighter.XmlFileType
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiElement
 import com.intellij.util.indexing.*
 import com.intellij.util.io.*
 import fr.phpierre.axelordevtools.objects.MetaReference
@@ -42,7 +41,7 @@ class ViewReferencesIndex : FileBasedIndexExtension<String, Int>() {
     }
 
     override fun getVersion(): Int {
-        return 4
+        return 0
     }
 
     override fun getInputFilter(): FileBasedIndex.InputFilter {

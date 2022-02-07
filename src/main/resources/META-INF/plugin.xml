@@ -22,6 +22,7 @@
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionNameIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewReferencesIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionReferencesIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.SelectionReferenceIndex" />
 
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ActionCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.DomainCompletionContributor"/>
@@ -48,7 +49,10 @@
 
         <!-- Gestion du depends = variable utilisable dedans  + fonction multri args ","-->
         <!-- Gestion des fields dummies : showIf, domain, etc etc -->
-
+        <!-- bugs on selection : unknow state -->
+        <!-- XML tree -->
+        <!-- Detect if user set a title in a name -->
+        <!-- Detect view from java (dialog)-->
         <!--
             Gestion des dummies :
 

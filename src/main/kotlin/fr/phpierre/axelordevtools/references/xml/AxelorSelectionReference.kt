@@ -7,16 +7,16 @@ import fr.phpierre.axelordevtools.util.XmlUtil
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
-class AxelorActionReference(@NotNull element: PsiElement) : PsiReferenceBase<PsiElement?>(element),
-    PsiPolyVariantReference {
+class AxelorSelectionReference(@NotNull element: PsiElement) : PsiReferenceBase<PsiElement?>(element),
+        PsiPolyVariantReference {
 
     @NotNull
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         val project: Project = myElement!!.project
         val range = TextRange(1, element.text.length - 1)
-        val actionName = element.text.substring(range.startOffset, range.endOffset)
+        val viewName = element.text.substring(range.startOffset, range.endOffset)
 
-        val properties: List<PsiElement> = XmlUtil.findActionReference(project, actionName)
+        val properties: List<PsiElement> = XmlUtil.findSelectionReference(project, viewName)
         val results: MutableList<ResolveResult> = ArrayList()
         for (property in properties) {
             results.add(PsiElementResolveResult(property))

@@ -3,9 +3,8 @@ package fr.phpierre.axelordevtools.lang
 import fr.phpierre.axelordevtools.objects.xml.action.*
 import fr.phpierre.axelordevtools.objects.xml.view.MetaFormView
 import fr.phpierre.axelordevtools.objects.xml.view.MetaGridView
-import fr.phpierre.axelordevtools.objects.xml.widget.Button
-import fr.phpierre.axelordevtools.objects.xml.widget.Field
-import fr.phpierre.axelordevtools.objects.xml.widget.PanelInclude
+import fr.phpierre.axelordevtools.objects.xml.widget.*
+import fr.phpierre.axelordevtools.objects.xml.domain.Integer as XMLInteger
 
 class XmlTagLang {
     companion object {
@@ -21,6 +20,10 @@ class XmlTagLang {
         const val axelorViewGanttType = "gantt"
         const val axelorViewDashboardType = "dashboard"
 
+        const val axelorActionViewType = "action-view"
+        const val axelorActionAttrsType = "action-attrs"
+        const val axelorActionRecordType = "action-record"
+
         val viewType = setOf(
             axelorViewGridType,
             axelorViewFormType,
@@ -34,9 +37,9 @@ class XmlTagLang {
             axelorViewDashboardType)
 
         val actionType = setOf(
-            "action-view",
-            "action-attrs",
-            "action-record",
+            axelorActionViewType,
+            axelorActionAttrsType,
+            axelorActionRecordType,
             "action-method",
             "action-script",
             "action-validate",
@@ -53,19 +56,25 @@ class XmlTagLang {
         val viewReferences = mapOf(
             "field" to Field::class.java,
             "panel-include" to PanelInclude::class.java,
-            "action-view" to ActionView::class.java,
+            "panel-related" to PanelRelated::class.java,
+            "view" to ActionView::class.java,
         )
 
         // Xml tag which can target action
         val actionReferences = mapOf(
             "grid" to MetaGridView::class.java,
             "form" to MetaFormView::class.java,
-            "button" to Button::class.java
+            "field" to Field::class.java,
+            "button" to Button::class.java,
+            "panel-dashlet" to PanelDashlet::class.java,
+            "action" to Action::class.java,
+            "node" to TreeViewNode::class.java,
+            "item" to MenuItem::class.java
+        )
 
-//            "action-attrs" to ActionAttrs::class.java,
-//            "action-method" to ActionMethod::class.java,
-//            "action-record" to ActionRecord::class.java,
-//            "action-validate" to ActionValidate::class.java,
+        val selectionReferences = mapOf(
+            "field" to Field::class.java,
+            "integer" to XMLInteger::class.java
         )
     }
 }

@@ -3,9 +3,10 @@ package fr.phpierre.axelordevtools.objects.xml.widget
 import com.intellij.psi.xml.XmlTag
 import fr.phpierre.axelordevtools.objects.MetaReference
 import fr.phpierre.axelordevtools.objects.xml.XmlParentActionReference
+import fr.phpierre.axelordevtools.objects.xml.XmlParentSelectionReference
 import fr.phpierre.axelordevtools.objects.xml.XmlParentViewReference
 
-class Field(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlParentViewReference, XmlParentActionReference {
+class Field(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlParentViewReference, XmlParentActionReference, XmlParentSelectionReference {
 
     fun getFormViewReference(): MetaReference? {
         return getMetaReference("form-view")
@@ -43,6 +44,10 @@ class Field(xmlTag: XmlTag) : SimpleWidget(xmlTag), XmlParentViewReference, XmlP
             references.addAll(it)
         }
         return references
+    }
+
+    override fun getSelectionReferences(): MetaReference? {
+        return getMetaReference("selection")
     }
 
 

@@ -120,8 +120,10 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
 
         val ON_TAB_SELECT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onTabSelect"))
 
+        val ITEM_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("item")))
+
         val ACTION_VIEW = PlatformPatterns.or(ACTION_ACTION, ON_CLICK_ACTION, ON_CHANGE_ACTION, ON_NEW_ACTION, ON_EDIT_ACTION,
-                ON_SAVE_ACTION, ON_DELETE_ACTION, ON_SELECT_ACTION, ON_LOAD_ACTION, ON_TAB_SELECT_ACTION)
+                ON_SAVE_ACTION, ON_DELETE_ACTION, ON_SELECT_ACTION, ON_LOAD_ACTION, ON_TAB_SELECT_ACTION, ITEM_ACTION)
 
         val AXELOR_VIEW = object : PsiReferenceProvider() {
             override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
@@ -222,6 +224,16 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 return arrayOf(AxelorActionReference(element))
             }
         }
+
+        val AXELOR_SELECTION_REFERENCE = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(AxelorSelectionReference(element))
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -234,5 +246,6 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(ACTION_VIEW, AXELOR_ACTION)
         registrar.registerReferenceProvider(VIEW_REFERENCE, AXELOR_VIEW_REFERENCE)
         registrar.registerReferenceProvider(ACTIONS_NAME, AXELOR_ACTION_REFERENCE)
+        registrar.registerReferenceProvider(SELECTION_NAME, AXELOR_SELECTION_REFERENCE)
     }
 }
