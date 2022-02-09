@@ -8,9 +8,7 @@
     <depends>com.intellij.properties</depends>
     <depends>com.intellij.java</depends>
     <depends>com.intellij.gradle</depends>
-    <depends optional="true" config-file="axelor-injections.xml">
-        org.intellij.intelliLang
-    </depends>
+    <depends>org.intellij.intelliLang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- https://plugins.jetbrains.com/docs/intellij/extension-point-list.html#corexml -->
@@ -53,6 +51,7 @@
         <!-- XML tree -->
         <!-- Detect if user set a title in a name -->
         <!-- Detect view from java (dialog)-->
+        <!-- panel-related : field click -->
         <!--
             Gestion des dummies :
 
@@ -68,6 +67,7 @@
         <!-- TODO: utilisation du champs : via FindUsagesProvider  -->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
     </extensions>
+
     <extensions defaultExtensionNs="org.intellij.intelliLang">
         <injectionConfig config="axelor-injections.xml"/>
     </extensions>
