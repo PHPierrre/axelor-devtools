@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0]
+
+- Compatibility with IntelliJ 2021.3
+- View, action and selection references (Show who call this element)
+- Automatic injected language HTML in CDATA
+- View and action auto-completion
+- Improve field auto-completion popup (field name, title, relation type)
+- Colored icons
+
 ## [1.1.0]
 
 - Action navigation + support multiple action in attribute value.

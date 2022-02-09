@@ -15,8 +15,10 @@ List of features :
 
 - Fields, relational fields, inherited fields auto-completion.
 - Fields, relational fields, inherited fields navigation (Ctrl + click)
-- Action navigation (onSave, onSelect, onLoad, onNew, onEdit, onDelete, onChange).
+- Action navigation (onSave, onSelect, onLoad, onNew, onEdit, onDelete, onChange)
+- Reverse view, action and selection navigation (from child to parent)
 - Action method navigation to Java files.
+- Automatic injected language HTML in CDATA
 - Detection of wrongly configured IntelliJ Project.
 - Model navigation and auto-completion.
 - View navigation (Ctrl click), detection of unknown views.
