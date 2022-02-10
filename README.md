@@ -1,17 +1,12 @@
-# axelor-devtools
+# IntelliJ IDEA - Axelor Plugin
 
-![Build](https://github.com/PHPierrre/axelor-devtools/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/17982-axelor.svg)](https://plugins.jetbrains.com/plugin/17982-axelor)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/17982-axelor.svg)](https://plugins.jetbrains.com/plugin/17982-axelor)
-
-## Template ToDo list
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html).
+## Description
 
 <!-- Plugin description -->
 This plugin improves your development with the Axelor Open Platform Framework. 
 You can now <kbd>Ctrl</kbd> <kbd>Click️</kbd> everywhere in XML files.
 
-List of features :
+## Features
 
 - Fields, relational fields, inherited fields auto-completion.
 - Fields, relational fields, inherited fields navigation (Ctrl + click)
@@ -25,8 +20,31 @@ List of features :
 - Selection navigation (Ctrl click) and auto-completion.
 - Xml attributes auto-completion.
 - application.properties display.
-
 <!-- Plugin description end -->
+
+## Usage
+
+- Fields auto completion
+
+![](./doc/images/auto_completion_fields.png)
+
+- Action method navigation
+
+![](./doc/images/action_method_navigation.png)
+
+- Action references shortcut to child
+
+![](./doc/images/action_references/action_onclick.png)
+
+![](./doc/images/action_references/action_onnew.png)
+
+- View references shortcut to child
+
+![](./doc/images/view_references/action_view.png)
+
+- Action references shortcut to parent
+
+![](./doc/images/action_references/reverse_action_method.png)
 
 ## Installation
 
