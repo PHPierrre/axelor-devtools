@@ -376,7 +376,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             val rootTag: XmlTag? = psiFile.rootTag
             rootTag?.subTags?.forEach { tag ->
-                if (tag.name == "action-method" || tag.name == "action-group" || tag.name == "action-view" || tag.name == "action-ws") {
+                if (XmlTagLang.actionType.contains(tag.name)) {
                     val nameAttr = tag.getAttribute("name")
                     if(nameAttr != null && nameAttr.value != null) {
                         results.add(nameAttr.value!!)
@@ -398,10 +398,12 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 val selections = rootTag?.subTags
 
                 selections?.forEach { tag ->
-                    val attr = tag.getAttribute("name")
-                    attr?.value?.let {
-                        if(it == actionName) {
-                            results.add(attr)
+                    if(XmlTagLang.actionType.contains(tag.name)) {
+                        val attr = tag.getAttribute("name")
+                        attr?.value?.let {
+                            if(it == actionName) {
+                                results.add(attr)
+                            }
                         }
                     }
                 }

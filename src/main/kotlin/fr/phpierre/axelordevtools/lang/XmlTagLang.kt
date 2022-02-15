@@ -23,6 +23,14 @@ class XmlTagLang {
         const val axelorActionViewType = "action-view"
         const val axelorActionAttrsType = "action-attrs"
         const val axelorActionRecordType = "action-record"
+        const val axelorActionMethodType = "action-method"
+        const val axelorActionScriptType = "action-script"
+        const val axelorActionValidateType = "action-validate"
+        const val axelorActionConditionType = "action-condition"
+        const val axelorActionGroupType = "action-group"
+        const val axelorActionImportType = "action-import"
+        const val axelorActionExportType = "action-export"
+        const val axelorActionWsType = "action-ws"
 
         val viewType = setOf(
             axelorViewGridType,
@@ -40,14 +48,14 @@ class XmlTagLang {
             axelorActionViewType,
             axelorActionAttrsType,
             axelorActionRecordType,
-            "action-method",
-            "action-script",
-            "action-validate",
-            "action-condition",
-            "action-group",
-            "action-import",
-            "action-export",
-            "action-ws"
+            axelorActionMethodType,
+            axelorActionScriptType,
+            axelorActionValidateType,
+            axelorActionConditionType,
+            axelorActionGroupType,
+            axelorActionImportType,
+            axelorActionExportType,
+            axelorActionWsType
         )
 
         val actionEvents = setOf("onNew", "onLoad", "onLoad", "onSave", "onDelete", "onChange", "onSelect", "onClick", "onTabSelect")
@@ -58,6 +66,7 @@ class XmlTagLang {
             "panel-include" to PanelInclude::class.java,
             "panel-related" to PanelRelated::class.java,
             "view" to ActionView::class.java,
+            "menuitem" to MenuItem::class.java,
         )
 
         // Xml tag which can target action
@@ -69,7 +78,8 @@ class XmlTagLang {
             "panel-dashlet" to PanelDashlet::class.java,
             "action" to Action::class.java,
             "node" to TreeViewNode::class.java,
-            "item" to MenuItem::class.java
+            "item" to MenuItem::class.java,
+            "menuitem" to MenuItem::class.java,
         )
 
         val selectionReferences = mapOf(

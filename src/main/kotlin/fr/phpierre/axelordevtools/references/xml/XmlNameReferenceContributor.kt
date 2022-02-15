@@ -25,6 +25,8 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
             .withParent(XmlPatterns.xmlTag().withName("action-view", "action-attrs", "action-record", "action-method",
             "action-script", "action-validate", "action-condition", "action-group", "action-import", "action-export", "action-ws")))
 
+        val PARENT_MENUITEM = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("parent").withParent(XmlPatterns.xmlTag().withName("menuitem")))
+
         // <... model="xxx" ...>
         val MODEL_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("model"))
 
@@ -120,7 +122,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
 
         val ON_TAB_SELECT_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("onTabSelect"))
 
-        val ITEM_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("item")))
+        val ITEM_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("item", "menuitem")))
 
         val ACTION_VIEW = PlatformPatterns.or(ACTION_ACTION, ON_CLICK_ACTION, ON_CHANGE_ACTION, ON_NEW_ACTION, ON_EDIT_ACTION,
                 ON_SAVE_ACTION, ON_DELETE_ACTION, ON_SELECT_ACTION, ON_LOAD_ACTION, ON_TAB_SELECT_ACTION, ITEM_ACTION)
@@ -244,7 +246,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)
         registrar.registerReferenceProvider(ACTION_METHOD_VIEW, AXELOR_JAVA_METHOD)
         registrar.registerReferenceProvider(ACTION_VIEW, AXELOR_ACTION)
-        registrar.registerReferenceProvider(VIEW_REFERENCE, AXELOR_VIEW_REFERENCE)
+        registrar.registerReferenceProvider(PlatformPatterns.or(PARENT_MENUITEM, VIEW_REFERENCE), AXELOR_VIEW_REFERENCE)
         registrar.registerReferenceProvider(ACTIONS_NAME, AXELOR_ACTION_REFERENCE)
         registrar.registerReferenceProvider(SELECTION_NAME, AXELOR_SELECTION_REFERENCE)
     }
