@@ -90,7 +90,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         val PANEL_INCLUDE_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("view").withParent(XmlPatterns.psiElement().withName("panel-include")))
 
         // <panel-dashlet ... action="xxx" .. />
-        val PANEL_DASHLET_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("panel-dashlet")))
+        val PANEL_DASHLET_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("action").withParent(XmlPatterns.psiElement().withName("panel-dashlet")))
 
         // <... grid-view="xxx" ..>
         val GRID_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("grid-view"))
@@ -99,7 +99,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         val FORM_VIEW_VIEW = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("form-view"))
 
         // When a xml attribute value target a view name.
-        val NAME_VIEW = PlatformPatterns.or(ACTION_VIEW_VIEW, PANEL_INCLUDE_VIEW, PANEL_DASHLET_VIEW, GRID_VIEW_VIEW, FORM_VIEW_VIEW)
+        val NAME_VIEW = PlatformPatterns.or(ACTION_VIEW_VIEW, PANEL_INCLUDE_VIEW, GRID_VIEW_VIEW, FORM_VIEW_VIEW)
 
 
         val ACTION_ACTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("name").withParent(XmlPatterns.psiElement().withName("action")))
@@ -236,6 +236,27 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                 return arrayOf(AxelorSelectionReference(element))
             }
         }
+
+        val AXELOR_PANEL_DASHLET = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                val viewRef = AxelorViewNameReference(element)
+                val actionRef = ActionViewMethodReference(element, TextRange(1 , element.text.length -1))
+                val arrayOfRef = arrayListOf<PsiReference>()
+
+                viewRef.resolve()?.let{
+                    arrayOfRef.add(viewRef)
+                }
+                actionRef.resolve()?.let{
+                    arrayOfRef.add(actionRef)
+                }
+
+                return arrayOfRef.toTypedArray()
+            }
+        }
     }
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
@@ -249,5 +270,6 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         registrar.registerReferenceProvider(PlatformPatterns.or(PARENT_MENUITEM, VIEW_REFERENCE), AXELOR_VIEW_REFERENCE)
         registrar.registerReferenceProvider(ACTIONS_NAME, AXELOR_ACTION_REFERENCE)
         registrar.registerReferenceProvider(SELECTION_NAME, AXELOR_SELECTION_REFERENCE)
+        registrar.registerReferenceProvider(PANEL_DASHLET_ACTION, AXELOR_PANEL_DASHLET)
     }
 }
