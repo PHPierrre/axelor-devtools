@@ -81,6 +81,11 @@ class XmlTagLang {
             "node" to TreeViewNode::class.java,
             "item" to MenuItem::class.java,
             "menuitem" to MenuItem::class.java,
+
+            "error" to ActionValidate::class.java,
+            "alert" to ActionValidate::class.java,
+            "info" to ActionValidate::class.java,
+            "notify" to ActionValidate::class.java,
         )
 
         val selectionReferences = mapOf(
