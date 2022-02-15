@@ -76,6 +76,7 @@ class XmlTagLang {
             "field" to Field::class.java,
             "button" to Button::class.java,
             "panel-dashlet" to PanelDashlet::class.java,
+            "panel-related" to PanelRelated::class.java,
             "action" to Action::class.java,
             "node" to TreeViewNode::class.java,
             "item" to MenuItem::class.java,
