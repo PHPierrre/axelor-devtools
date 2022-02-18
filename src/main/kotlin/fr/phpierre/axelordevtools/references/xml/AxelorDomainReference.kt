@@ -3,6 +3,7 @@ package fr.phpierre.axelordevtools.references.xml
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
+import com.intellij.psi.xml.XmlTag
 import fr.phpierre.axelordevtools.util.XmlUtil
 import org.jetbrains.annotations.NotNull
 
@@ -18,7 +19,14 @@ class AxelorDomainReference(@NotNull element: PsiElement) : PsiReferenceBase<Psi
 
         val project: Project = myElement!!.project
         val range = TextRange(1, element.text.length - 1)
-        val domainName = element.text.substring(range.startOffset, range.endOffset)
+        var domainName = element.text.substring(range.startOffset, range.endOffset)
+
+        if(!XmlUtil.isFullyQualifiedName(domainName)) {
+            val rootTag: XmlTag = element.parent.parent.parent.parent as XmlTag
+            XmlUtil.resolveFQN(rootTag, domainName)?.let {
+                domainName = it
+            }
+        }
 
         val properties: List<PsiElement> = XmlUtil.findDomainFromPackage(project, domainName)
         for (property in properties) {

@@ -555,6 +555,14 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
         fun isFullyQualifiedName(domainReference: String): Boolean {
             return domainReference.contains(".")
         }
+
+        fun resolveFQN(rootTag: XmlTag, domainName: String): String? {
+            rootTag.findFirstSubTag("module")?.getAttribute("package")?.let { namespace ->
+                return "${namespace.value}.$domainName"
+            }
+
+            return null
+        }
     }
 
 }
