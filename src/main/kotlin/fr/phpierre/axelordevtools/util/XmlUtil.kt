@@ -89,9 +89,18 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 val tail: String = key.substringAfter(".")
                 val relations: Set<PsiElement> = searchFieldInEntity(entity, field)
                 for (relation in relations) {
-                    val ref = (relation.parent as XmlTag).getAttribute("ref")
-                    ref?.value?.let {
-                        results.addAll(findFieldFromModelName(file.project,tail, it, searchParam))
+                    val refAttribute = (relation.parent as XmlTag).getAttribute("ref")
+                    refAttribute?.value?.let {
+                        var ref = it;
+
+                        // if ref is ExampleDomain, so we convert into ext.namespace.directory.ExampleDomain
+                        if(!isFullyQualifiedName(ref)) {
+                            rootTag.findFirstSubTag("module")?.getAttribute("package")?.let { namespace ->
+                                ref = "${namespace.value}.$ref"
+                            }
+                        }
+
+                        results.addAll(findFieldFromModelName(file.project,tail, ref, searchParam))
                     }
                 }
             }
@@ -541,6 +550,10 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 }
             }
             return result
+        }
+
+        fun isFullyQualifiedName(domainReference: String): Boolean {
+            return domainReference.contains(".")
         }
     }
 
