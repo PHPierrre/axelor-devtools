@@ -9,6 +9,7 @@
     <depends>com.intellij.java</depends>
     <depends>com.intellij.gradle</depends>
     <depends>org.intellij.intelliLang</depends>
+    <!--<depends>com.intellij.css</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- https://plugins.jetbrains.com/docs/intellij/extension-point-list.html#corexml -->
@@ -52,6 +53,7 @@
         <!-- Detect if user set a title in a name -->
         <!-- Detect view from java (dialog)-->
         <!-- panel-related : field click -->
+        <!-- Couleur support carré dans la marge pour les menuitem + support des couleurs dites textuelles : "green" au lieu de #00FF00 -->
         <!--
             Gestion des dummies :
 

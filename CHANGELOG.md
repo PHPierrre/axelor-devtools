@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.1]
+
+- Fix domain ref in domain if the reference was not a FQN
+- Fix auto-completion of fields and fields in editor if the reference was not a FQN
+- parent attribute reference on menuitem (XML)
+- action attribute reference on menuitem (XML)
+- Reference action from panel-related (XML)
+- Target action & view from panel-dashlet (XML)
+- action-validate action attribute support (XML)
+
 ## [1.2.0]
 
 - Compatibility with IntelliJ 2021.3
