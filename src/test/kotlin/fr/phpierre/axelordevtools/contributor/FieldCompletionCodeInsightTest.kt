@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
+import fr.phpierre.axelordevtools.contributor.xml.FieldCompletionContributor
 
 
 class FieldCompletionCodeInsightTest : LightJavaCodeInsightFixtureTestCase() {
@@ -17,7 +18,8 @@ class FieldCompletionCodeInsightTest : LightJavaCodeInsightFixtureTestCase() {
         myFixture.complete(CompletionType.BASIC)
         val lookupElementStrings: MutableList<String> = myFixture.lookupElementStrings!!
         assertNotNull(lookupElementStrings)
-        assertSameElements(lookupElementStrings, "city", "name", "description", "viewType", "isActive")
+        assertSameElements(lookupElementStrings, "city", "name", "description", "viewType", "isActive",
+                "id", "UUID", "archived", "externalCode", "externalId", "version", "createdOn", "updatedOn", "attrs", "createdBy", "updatedBy")
     }
 
     fun testCompletionModel() {
