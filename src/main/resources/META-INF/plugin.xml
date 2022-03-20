@@ -36,6 +36,8 @@
 
         <editorNotificationProvider implementation="fr.phpierre.axelordevtools.notification.SetupGradleBuildTool" />
 
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.phpierre.axelordevtools.marker.IconBackgroundMarkerProvider"/>
+
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
         <!--OSEF : bug in editor, if field name == parent, marche pas -->
