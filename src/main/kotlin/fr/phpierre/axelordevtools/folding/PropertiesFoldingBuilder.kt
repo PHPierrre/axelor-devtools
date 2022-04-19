@@ -30,15 +30,18 @@ class PropertiesFoldingBuilder : FoldingBuilderEx() {
             root,
             PsiLiteralExpression::class.java
         )
+
+
         for (literalExpression in literalExpressions) {
             val method = PsiTreeUtil.getParentOfType(literalExpression, PsiMethodCallExpression::class.java)
             method?.let {
                 val qualifiedName = method.resolveMethod()?.containingClass?.qualifiedName
                 qualifiedName?.let {
-                    if(qualifiedName == APPLICATION_CONFIG_FULLPATH) {
-                        descriptors.add(FoldingDescriptor(literalExpression.node, TextRange(literalExpression.textRange.startOffset + 1,
-                            literalExpression.textRange.endOffset - 1),
-                            group))
+                    if(qualifiedName == APPLICATION_CONFIG_FULLPATH && (literalExpression.value as String).isNotEmpty()) {
+                        val foldingDescriptor = FoldingDescriptor(literalExpression.node,
+                                TextRange(literalExpression.textRange.startOffset + 1, literalExpression.textRange.endOffset - 1),
+                                group)
+                        descriptors.add(foldingDescriptor)
                     }
                 }
             }
