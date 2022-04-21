@@ -41,7 +41,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
          * @param searchParam The search parameter
          * @return A set of fields found
          */
-        fun findFieldFromModelName(
+        fun findFieldInModelNameAndParents(
             project: Project,
             key: String,
             modelName: String,
@@ -63,7 +63,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
          * Find if a field name exist in a file and his parents
          * Can be used to verify that the key exist in a domain name.
          * @param file The domain file
-         * @param key The field name
+         * @param key The field name (Can have dot if it's a relational field)
          * @param searchParam The search parameter
          * @return A set of fields found
          */
@@ -79,7 +79,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             entity.getAttribute("extends")?.let {
                 it.value?.let { value ->
-                    results.addAll(findFieldFromModelName(file.project, key, value, searchParam))
+                    results.addAll(findFieldInModelNameAndParents(file.project, key, value, searchParam))
                 }
             }
 
@@ -100,7 +100,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                             }
                         }
 
-                        results.addAll(findFieldFromModelName(file.project,tail, ref, searchParam))
+                        results.addAll(findFieldInModelNameAndParents(file.project,tail, ref, searchParam))
                     }
                 }
             }
@@ -116,10 +116,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return results
         }
 
-        private fun searchFieldInEntity(
-            entity: XmlTag,
-            key: String
-        ): Set<PsiElement> {
+        private fun searchFieldInEntity(entity: XmlTag, key: String): Set<PsiElement> {
             val results: MutableSet<PsiElement> = mutableSetOf()
 
             entity.subTags.forEach { tag ->
@@ -133,9 +130,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return results
         }
 
-        private fun searchFieldsInEntity(
-                entity: XmlTag
-        ): Set<PsiElement> {
+        private fun searchFieldsInEntity(entity: XmlTag): Set<PsiElement> {
             val results: MutableSet<PsiElement> = mutableSetOf()
 
             entity.subTags.forEach { tag ->

@@ -53,7 +53,7 @@ class FieldCompletionContributor : CompletionContributor() {
                     val autoCompletion = PsiElementUtil.getAutoCompleteValue(parameters.position)
 
                     modelName?.let {
-                        val fields: Set<PsiElement> = XmlUtil.findFieldFromModelName(project, autoCompletion, modelName, XmlUtil.FieldSearch.ALL)
+                        val fields: Set<PsiElement> = XmlUtil.findFieldInModelNameAndParents(project, autoCompletion, modelName, XmlUtil.FieldSearch.ALL)
 
                         for (field in fields) {
                             (field as XmlAttribute).value?.let {
