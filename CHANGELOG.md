@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.2]
+
+- Menuitem color
+- Minor bugs
+
 ## [1.2.1]
 
 - Fix domain ref in domain if the reference was not a FQN
