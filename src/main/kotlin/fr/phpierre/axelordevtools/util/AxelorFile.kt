@@ -1,5 +1,6 @@
 package fr.phpierre.axelordevtools.util
 
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 
 class AxelorFile {
@@ -15,9 +16,21 @@ class AxelorFile {
             var currentElement = element.containingFile.containingDirectory
             var lastDirectory = element.containingFile.containingDirectory.name
 
-            while(currentElement.name != RESOURCES_FOLDER) {
+            while(currentElement.name != RESOURCES_FOLDER || currentElement != null) {
                 currentElement = currentElement.parent
                 lastDirectory = currentElement.name
+            }
+
+            return lastDirectory
+        }
+
+        private fun getFolderBeforeResourceFolder(virtualFile: VirtualFile): String {
+            var currentElement = virtualFile.parent
+            var lastDirectory = virtualFile.parent.name
+
+            while(currentElement.name != RESOURCES_FOLDER || currentElement != null) {
+                currentElement = currentElement.parent
+                lastDirectory = currentElement.name // <- throw here
             }
 
             return lastDirectory
@@ -29,6 +42,14 @@ class AxelorFile {
 
         fun isView(element: PsiElement): Boolean {
             return getFolderBeforeResourceFolder(element) == VIEWS_FOLDER
+        }
+
+        fun isDomain(virtualFile: VirtualFile): Boolean {
+            return getFolderBeforeResourceFolder(virtualFile) == DOMAINS_FOLDER
+        }
+
+        fun isView(virtualFile: VirtualFile): Boolean {
+            return getFolderBeforeResourceFolder(virtualFile) == VIEWS_FOLDER
         }
     }
 }
