@@ -76,6 +76,15 @@
         <injectionConfig config="axelor-injections.xml"/>
     </extensions>
 
+    <actions>
+        <action id="Axelor.Domain" class="fr.phpierre.axelordevtools.actions.CreateAxelorDomain">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile" />
+        </action>
+        <action id="Axelor.View" class="fr.phpierre.axelordevtools.actions.CreateAxelorView">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile" />
+        </action>
+    </actions>
+
     <applicationListeners>
     </applicationListeners>
 </idea-plugin>
