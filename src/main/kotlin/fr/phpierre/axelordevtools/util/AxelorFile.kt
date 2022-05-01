@@ -16,9 +16,9 @@ class AxelorFile {
             var currentElement = element.containingFile.containingDirectory
             var lastDirectory = element.containingFile.containingDirectory.name
 
-            while(currentElement.name != RESOURCES_FOLDER || currentElement != null) {
-                currentElement = currentElement.parent
+            while(currentElement.name != RESOURCES_FOLDER && currentElement.parent != null) {
                 lastDirectory = currentElement.name
+                currentElement = currentElement.parent
             }
 
             return lastDirectory
@@ -28,9 +28,9 @@ class AxelorFile {
             var currentElement = virtualFile.parent
             var lastDirectory = virtualFile.parent.name
 
-            while(currentElement.name != RESOURCES_FOLDER || currentElement != null) {
+            while(currentElement.name != RESOURCES_FOLDER && currentElement.parent != null) {
+                lastDirectory = currentElement.name
                 currentElement = currentElement.parent
-                lastDirectory = currentElement.name // <- throw here
             }
 
             return lastDirectory
