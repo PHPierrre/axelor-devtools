@@ -47,7 +47,6 @@
         <applicationService serviceImplementation="fr.phpierre.axelordevtools.settings.AxelorSettingsState"/>
         <projectConfigurable parentId="tools" instance="fr.phpierre.axelordevtools.ui.AxelorSettingsConfigurable" id="Axelor.SettingsForm" displayName="Axelor" />
 
-
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
 
@@ -79,6 +78,9 @@
 
         <!-- TODO: utilisation du champs : via FindUsagesProvider  -->
         <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
+
+        <toolWindow id="Axelor" anchor="right" icon="fr.phpierre.axelordevtools.icons.AxelorIcons.fieldIcon"
+                    factoryClass="fr.phpierre.axelordevtools.window.AxelorToolWindow"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">
