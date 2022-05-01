@@ -38,9 +38,13 @@
 
         <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.phpierre.axelordevtools.marker.IconBackgroundMarkerProvider"/>
 
+        <localInspection language="XML" groupPath="Axelor" displayName="View name can not have space" level="ERROR"
+                         shortName="AxelorXmlViewNameInspection"
+                         groupName="View"
+                         enabledByDefault="true"
+                         implementationClass="fr.phpierre.axelordevtools.inspection.XmlViewNameInspection"  />
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
-        <!--OSEF : bug in editor, if field name == parent, marche pas -->
 
         <!-- response:setValues Autocompletion des domaines + vérification des var existantes -->
         <!--
@@ -52,10 +56,10 @@
         <!-- Gestion des fields dummies : showIf, domain, etc etc -->
         <!-- bugs on selection : unknow state -->
         <!-- XML tree -->
-        <!-- Detect if user set a title in a name -->
         <!-- Detect view from java (dialog)-->
         <!-- panel-related : field click -->
         <!-- Couleur support carré dans la marge pour les menuitem + support des couleurs dites textuelles : "green" au lieu de #00FF00 -->
+        <!-- ENUM + gestion vues et domaines dans des sous-dossiers -->
         <!--
             Gestion des dummies :
 
