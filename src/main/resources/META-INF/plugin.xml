@@ -43,6 +43,11 @@
                          groupName="View"
                          enabledByDefault="true"
                          implementationClass="fr.phpierre.axelordevtools.inspection.XmlViewNameInspection"  />
+
+        <applicationService serviceImplementation="fr.phpierre.axelordevtools.settings.AxelorSettingsState"/>
+        <projectConfigurable parentId="tools" instance="fr.phpierre.axelordevtools.ui.AxelorSettingsConfigurable" id="Axelor.SettingsForm" displayName="Axelor" />
+
+
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
 
