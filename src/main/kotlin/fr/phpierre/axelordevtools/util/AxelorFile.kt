@@ -51,5 +51,13 @@ class AxelorFile {
         fun isView(virtualFile: VirtualFile): Boolean {
             return getFolderBeforeResourceFolder(virtualFile) == VIEWS_FOLDER
         }
+
+        fun toLocalePath(views: Set<VirtualFile>): Set<String> {
+            val paths: MutableSet<String> = mutableSetOf()
+            for(view in views) {
+                paths.add(view.path)
+            }
+            return paths
+        }
     }
 }

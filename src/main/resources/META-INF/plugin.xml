@@ -9,6 +9,8 @@
     <depends>com.intellij.java</depends>
     <depends>com.intellij.gradle</depends>
     <depends>org.intellij.intelliLang</depends>
+    <depends>Tomcat</depends>
+    <!--<depends optional="true">com.intellij.tomcat</depends>-->
     <!--<depends>com.intellij.css</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
@@ -45,7 +47,9 @@
                          implementationClass="fr.phpierre.axelordevtools.inspection.XmlViewNameInspection"  />
 
         <applicationService serviceImplementation="fr.phpierre.axelordevtools.settings.AxelorSettingsState"/>
-        <projectConfigurable parentId="tools" instance="fr.phpierre.axelordevtools.ui.AxelorSettingsConfigurable" id="Axelor.SettingsForm" displayName="Axelor" />
+        <projectConfigurable instance="fr.phpierre.axelordevtools.ui.AxelorSettingsConfigurable" id="Axelor.SettingsForm" displayName="Axelor" />
+
+        <!--<programRunner implementation="fr.phpierre.axelordevtools.debugger.AxelorDebugRunner" />-->
 
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
@@ -64,6 +68,7 @@
         <!-- panel-related : field click -->
         <!-- Couleur support carré dans la marge pour les menuitem + support des couleurs dites textuelles : "green" au lieu de #00FF00 -->
         <!-- ENUM + gestion vues et domaines dans des sous-dossiers -->
+        <!-- extended view : <attribute="onSelect" not detected when used -->
         <!--
             Gestion des dummies :
 
@@ -76,11 +81,20 @@
             Gestion du dummies et de sa relation : A tester (cf exemple au dessus)
         -->
 
-        <!-- TODO: utilisation du champs : via FindUsagesProvider  -->
-        <!-- todo: parameterNameHints : souligner les éléments faux dans les vues -->
+        <!-- Rendre window et les params uniquement si ultimate -->
+        <!-- Bouton (utiliser la configuration tomcat dans les configs) -->
+        <!-- Use tomcat if pas d'url renseigné -->
 
-        <toolWindow id="Axelor" anchor="right" icon="fr.phpierre.axelordevtools.icons.AxelorIcons.fieldIcon"
+        <!-- Retour visuel quand c'est fini -->
+        <!-- Faire design -->
+
+        <toolWindow id="Axelor" anchor="right" icon="fr.phpierre.axelordevtools.icons.AxelorIcons.logo13_13"
                     factoryClass="fr.phpierre.axelordevtools.window.AxelorToolWindow"/>
+
+        <notificationGroup id="Restore All Notification Group" displayType="BALLOON" key="notification.axelor.general.restore.all"/>
+        <notificationGroup id="Restore Alle Notification Group" displayType="BALLOON" key="notification.axelor.general.restore.alle"/>
+
+        <defaultTemplatePropertiesProvider implementation="fr.phpierre.axelordevtools.actions.AxelorDefaultTemplatePropertiesProvider" />
     </extensions>
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">
@@ -96,6 +110,12 @@
         </action>
     </actions>
 
+    <projectListeners>
+        <listener class="fr.phpierre.axelordevtools.listener.ViewHotReloadListener" topic="com.intellij.openapi.compiler.CompilationStatusListener"/>
+        <listener class="fr.phpierre.axelordevtools.listener.DebuggerManagerListener" topic="com.intellij.xdebugger.XDebuggerManagerListener" />
+    </projectListeners>
+
     <applicationListeners>
+        <listener class="fr.phpierre.axelordevtools.listener.EditedViewListener" topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
     </applicationListeners>
 </idea-plugin>

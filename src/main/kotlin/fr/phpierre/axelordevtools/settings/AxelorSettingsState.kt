@@ -13,9 +13,11 @@ import org.jetbrains.annotations.Nullable
 )
 class AxelorSettingsState : PersistentStateComponent<AxelorSettingsState> {
 
+    var erpUrl: String = ""
     var erpUsername: String = "admin"
     var erpPassword: String = "admin"
     var aopVersion: Double = 5.1
+    var hotReloadActivated: Boolean = true
 
     companion object {
         fun getInstance(): AxelorSettingsState {
@@ -30,5 +32,17 @@ class AxelorSettingsState : PersistentStateComponent<AxelorSettingsState> {
 
     override fun loadState(state: AxelorSettingsState) {
         return XmlSerializerUtil.copyBean(state, this);
+    }
+
+    fun getUrlConfig(): String {
+        // UI : Champs Url + bouton à droite pour remplir auto selon la config tomcat (ultimate only)
+        // Afficher l'url dans la boite de dialogue
+        // Gérer tomcat si url est vide
+        // Gérer si oublié de mettre un slash
+        return erpUrl;
+    }
+
+    fun getActionUrlConfig(): String {
+        return getUrlConfig() + "ws/action";
     }
 }

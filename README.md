@@ -8,6 +8,7 @@ You can now <kbd>Ctrl</kbd> <kbd>Click️</kbd> everywhere in XML files.
 
 ## Features
 
+- **NEW :** Views hot reload with [this Axelor module](https://github.com/PHPierrre/Axelor-IntelliJ-Views-Hot-Reload)
 - Fields, relational fields, inherited fields auto-completion.
 - Fields, relational fields, inherited fields navigation (Ctrl + click)
 - Action navigation (onSave, onSelect, onLoad, onNew, onEdit, onDelete, onChange)

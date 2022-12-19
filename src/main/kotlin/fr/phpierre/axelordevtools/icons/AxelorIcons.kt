@@ -8,6 +8,9 @@ object AxelorIcons {
     val Logo = IconLoader.getIcon("/icons/axelorIcon.svg", javaClass)
 
     @JvmField
+    val logo13_13 = IconLoader.getIcon("/icons/axelorIcon13_13.svg", javaClass)
+
+    @JvmField
     val viewIcon = IconLoader.getIcon("/icons/axelorIconBlue.svg", javaClass)
 
     @JvmField
