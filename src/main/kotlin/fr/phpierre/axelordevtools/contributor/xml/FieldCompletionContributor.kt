@@ -28,10 +28,10 @@ class FieldCompletionContributor : CompletionContributor() {
         // These columns are present in every table.
         val defaultColumns = setOf(
             "id",
-            "UUID",
+            "UUID", // To remove, not in Axelor
             "archived",
-            "externalCode",
-            "externalId",
+            "externalCode", // To remove, not in Axelor
+            "externalId", // To remove, not in Axelor
             "version",
             "createdOn",
             "updatedOn",
