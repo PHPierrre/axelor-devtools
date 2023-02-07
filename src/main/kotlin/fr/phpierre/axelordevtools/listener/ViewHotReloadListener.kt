@@ -44,7 +44,7 @@ class ViewHotReloadListener : CompilationStatusListener {
                 return@executeOnPooledThread
             }
 
-            if(compileContext.getMessageCount(CompilerMessageCategory.INFORMATION) > 0) {
+
                 val files = AxelorFile.toLocalePath(EditedViewService.getViews())
                 if(files.isEmpty()) {
                     return@executeOnPooledThread
@@ -55,7 +55,7 @@ class ViewHotReloadListener : CompilationStatusListener {
                     AxelorHttpResponseNotifier.notify(compileContext.project, it[0].notify, NotificationType.INFORMATION)
                     EditedViewService.reset();
                 }
-            }
+
 
         }
     }
