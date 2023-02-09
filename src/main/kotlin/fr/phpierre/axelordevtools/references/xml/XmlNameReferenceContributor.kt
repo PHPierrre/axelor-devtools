@@ -31,7 +31,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         val MODEL_NAME = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("model"))
 
         // <... ref="xxxx" ...>
-        val REF_DOMAIN = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("ref"))
+        val REF_DOMAIN = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("ref").andNot(XmlPatterns.psiElement().withParent(XmlPatterns.xmlTag().withName("enum"))))
 
         // <entity .. extends="xxxx" ...>
         val EXTENDS_ENTITY = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("extends").withParent(XmlPatterns.xmlTag().withName("entity")))
@@ -70,7 +70,19 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
         //<...selection="xxx" ...>
         val SELECTION = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("selection"))
 
+        //<enum name="..." ref="xxx" />
+        val ENUM_REF = XmlPatterns.xmlAttributeValue().withParent(XmlPatterns.xmlAttribute("ref").withParent(XmlPatterns.psiElement().withName("enum")))
 
+        /**
+         * <enum name="...">
+         *     <item ...>
+         *     <item ...>
+         * </enum>
+         */
+        val ENUM_NAME = XmlPatterns.xmlAttributeValue()
+                .andNot(XmlPatterns.psiElement().withAncestor(2, XmlPatterns.xmlAttribute().withName("ref")))
+                .withParent(XmlPatterns.xmlAttribute("ref")
+                .withParent(XmlPatterns.psiElement().withName("enum")))
         /**
          * <action-method name="...">
          *     <call class="..." method="xxx"/>
@@ -149,6 +161,16 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
                     return PsiReference.EMPTY_ARRAY
 
                 return arrayOf(AxelorDomainReference(element))
+            }
+        }
+
+        val AXELOR_ENUM = object : PsiReferenceProvider() {
+            override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+
+                if(element !is XmlAttributeValueImpl)
+                    return PsiReference.EMPTY_ARRAY
+
+                return arrayOf(AxelorEnumReference(element))
             }
         }
 
@@ -267,6 +289,7 @@ class XmlNameReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(NAME_VIEW, AXELOR_VIEW)
         registrar.registerReferenceProvider(MODEL_DOMAIN, AXELOR_DOMAIN)
+        registrar.registerReferenceProvider(ENUM_REF, AXELOR_ENUM)
         registrar.registerReferenceProvider(FIELD_NAME, AXELOR_FIELD)
         registrar.registerReferenceProvider(FIELD_NAME_IN_EDITOR, AXELOR_FIELD_IN_EDITOR)
         registrar.registerReferenceProvider(SELECTION, AXELOR_SELECTION)

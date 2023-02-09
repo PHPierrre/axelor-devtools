@@ -16,9 +16,11 @@ import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.structuralsearch.impl.matcher.GlobalMatchingVisitor
 import com.intellij.util.indexing.FileBasedIndex
+import com.intellij.util.xml.DomManager
 import fr.phpierre.axelordevtools.indexes.*
 import fr.phpierre.axelordevtools.lang.XmlTagLang
 import fr.phpierre.axelordevtools.objects.MetaReference
+import fr.phpierre.axelordevtools.objects.dom.DomainModels
 import fr.phpierre.axelordevtools.objects.xml.XmlParentActionReference
 import fr.phpierre.axelordevtools.objects.xml.XmlParentSelectionReference
 import fr.phpierre.axelordevtools.objects.xml.XmlParentViewReference
@@ -547,6 +549,38 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             return result
         }
 
+        fun findEnumName(project: Project, enumName: String): Set<PsiElement> {
+            val results: MutableSet<PsiElement> = mutableSetOf()
+            val files = FileBasedIndex.getInstance().getContainingFiles(EnumNameIndex.KEY, enumName, ProjectScope.getProjectScope(project))
+
+            for (virtualFile in files) {
+                val file: PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
+
+                val manager = DomManager.getDomManager(file?.project)
+                val root: DomainModels = manager.getFileElement(file as XmlFile, DomainModels::class.java)!!.rootElement
+                root.getEnums().forEach { enum ->
+                    if(enum.getName().stringValue == enumName) {
+                        enum.xmlElement?.let {
+                            results.add(it)
+                        }
+                    }
+                }
+                /*val rootTag: XmlTag? = (file as XmlFile).rootTag
+
+                val enums = rootTag?.findSubTags("enum")
+
+                enums?.forEach { tag ->
+                    val attr = tag.getAttribute("name")
+                    attr?.value?.let {
+                        if(it == enumName) {
+                            results.add(attr)
+                        }
+                    }
+                }*/
+            }
+            return results
+        }
+
         fun isFullyQualifiedName(domainReference: String): Boolean {
             return domainReference.contains(".")
         }
@@ -557,6 +591,23 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             }
 
             return null
+        }
+
+        fun indexAxelorEnumName(psiFile: PsiFile): Set<String> {
+            val results: MutableSet<String> = mutableSetOf()
+            if(psiFile !is XmlFile) {
+                return results
+            }
+
+            val manager = DomManager.getDomManager(psiFile.project)
+            val root: DomainModels = manager.getFileElement(psiFile, DomainModels::class.java)!!.rootElement
+            root.getEnums().forEach { enum ->
+                enum.getName().stringValue?.let {
+                    results.add(it)
+                }
+            }
+
+            return results;
         }
     }
 

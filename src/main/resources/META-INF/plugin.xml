@@ -24,6 +24,7 @@
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ViewReferencesIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.ActionReferencesIndex" />
         <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.SelectionReferenceIndex" />
+        <fileBasedIndex implementation="fr.phpierre.axelordevtools.indexes.EnumNameIndex" />
 
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.ActionCompletionContributor"/>
         <completion.contributor language="XML" implementationClass="fr.phpierre.axelordevtools.contributor.xml.DomainCompletionContributor"/>
@@ -49,7 +50,10 @@
         <applicationService serviceImplementation="fr.phpierre.axelordevtools.settings.AxelorSettingsState"/>
         <projectConfigurable instance="fr.phpierre.axelordevtools.ui.AxelorSettingsConfigurable" id="Axelor.SettingsForm" displayName="Axelor" />
 
+        <!-- Separation et harmonisation des éléments qui sont des ref (pointent vers quelque chose) des names (la ressources visée) -->
         <!--<programRunner implementation="fr.phpierre.axelordevtools.debugger.AxelorDebugRunner" />-->
+
+        <dom.fileMetaData implementation="fr.phpierre.axelordevtools.objects.dom.DomainFileDescription" rootTagName="domain-models" />
 
         <!-- auto-c in editor -->
         <!-- + relation pour auto-c in editor -->
