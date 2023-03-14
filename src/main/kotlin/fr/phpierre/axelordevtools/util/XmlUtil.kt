@@ -172,8 +172,7 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
 
             val rootTag: XmlTag? = psiFile.rootTag
 
-            val module: XmlTag? = rootTag?.findFirstSubTag("module")
-            val aPackage: String? = module?.getAttributeValue("package")
+            val aPackage = getPackageOfDomain(rootTag)
 
             val entity: XmlTag? = rootTag?.findFirstSubTag("entity")
             val name: String? = entity?.getAttributeValue("name")
@@ -183,6 +182,11 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             }
 
             return "$aPackage.$name"
+        }
+
+        fun getPackageOfDomain(rootTag: XmlTag?): String? {
+            val module: XmlTag? = rootTag?.findFirstSubTag("module")
+            return module?.getAttributeValue("package");
         }
 
 
@@ -559,9 +563,11 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
                 val manager = DomManager.getDomManager(file?.project)
                 val root: DomainModels = manager.getFileElement(file as XmlFile, DomainModels::class.java)!!.rootElement
                 root.getEnums().forEach { enum ->
-                    if(enum.getName().stringValue == enumName) {
-                        enum.xmlElement?.let {
-                            results.add(it)
+                    enum.getName().stringValue?.let {
+                        if(resolveFQN(root.xmlTag!!, it) == enumName) {
+                            enum.xmlElement?.let { enumTag ->
+                                results.add(enumTag)
+                            }
                         }
                     }
                 }
@@ -602,8 +608,10 @@ class XmlUtil(matchingVisitor: GlobalMatchingVisitor) {
             val manager = DomManager.getDomManager(psiFile.project)
             val root: DomainModels = manager.getFileElement(psiFile, DomainModels::class.java)!!.rootElement
             root.getEnums().forEach { enum ->
-                enum.getName().stringValue?.let {
-                    results.add(it)
+                enum.getName().stringValue?.let { enumName ->
+                    resolveFQN(root.xmlTag!!, enumName)?.let { enumFQN ->
+                        results.add(enumFQN)
+                    }
                 }
             }
 
